@@ -1,0 +1,57 @@
+.sidenav {
+    display: inline-flex;
+   
+    height: auto;
+    width: 250px;
+    position: relative;
+    z-index: 0;
+    top: 0px;
+    left: 0px;
+    background-color: #15161D;
+    overflow-x: hidden;
+    padding-top: 30px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    
+    color: hsl(0, 0%, 100%);
+    display: block;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #a72626;
+  }
+  
+  /* Style page content */
+  .main {
+    display: block;
+    margin-left: 160px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+  }
+  .check {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  .edit-data {
+    color: white;
+    background-color: #4446c7;
+    border-radius: 12px;
+  }
+  .edit-data:hover{
+    color: hsl(0, 0%, 100%);
+  }
