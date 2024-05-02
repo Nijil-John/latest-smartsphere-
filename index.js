@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.use(express.static('assets'))
+
 
 const adminRoute = require("./routes/adminRoute")//adminroute from routes
 const userRoute = require("./routes/userRoute")//user from routes

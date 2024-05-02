@@ -183,7 +183,7 @@ const userProfile = async(req,res)=>{
   try {
     const _id =req.session.user_id
     const userData= await User.findOne({_id:_id})
-    
+    console.log(userData);
     res.render('userProfile',{users:userData})
   } catch (error) {
     console.log(error.message);

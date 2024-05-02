@@ -14,7 +14,7 @@ userRoute.use(session({
     saveUninitialized: true 
 }))
 
-
+userRoute.use(express.static('userAssets'))
 userRoute.set('view engine', 'ejs');
 userRoute.set("views","./views/user");
 
