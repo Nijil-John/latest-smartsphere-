@@ -1,0 +1,23 @@
+/* Style table rows */
+.admindashboardTableRow:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.admindashboardTableRow:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Style table cells */
+#admindashboardTable td {
+    padding: 8px;
+}
+
+/* Style link within table cells */
+#admindashboardTable a {
+    color: blue;
+    text-decoration: none;
+}
+
+#admindashboardTable a:hover {
+    text-decoration: underline;
+}

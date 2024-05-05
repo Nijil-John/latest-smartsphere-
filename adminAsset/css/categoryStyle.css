@@ -1,0 +1,76 @@
+/* Style the form container */
+form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* Style the form inputs and labels */
+label {
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style the submit button */
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+
+/* Style the table */
+#admindashboardTable {
+    width: 60%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+/* Style table headers */
+#admindashboardTable th {
+    background-color: #f2f2f2;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Style table rows */
+.admindashboardTableRow:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.admindashboardTableRow:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Style table cells */
+#admindashboardTable td {
+    padding: 8px;
+}
+
+/* Style link within table cells */
+#admindashboardTable a {
+    color: blue;
+    text-decoration: none;
+}
+
+#admindashboardTable a:hover {
+    text-decoration: underline;
+}
+.searchbar {
+    width: 450px;
+    display: inline-flex;
+}

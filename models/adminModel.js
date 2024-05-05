@@ -12,6 +12,10 @@ const adminSchema = mongoose.Schema({
   mobile: {
     type: String,
     required: true,
+  },  
+  DOB: {
+    type: Date,
+    required: true,
   },
   password: {
     type: String,
@@ -24,9 +28,6 @@ const adminSchema = mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: 1,
-  },
-  blocked:{
-    type:Number
   },
   createdAt: {
     type: Date,
