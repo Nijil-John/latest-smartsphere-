@@ -26,8 +26,9 @@ const userSchema = mongoose.Schema({
     default: 1,
   },
   blocked:{
-    type:Number
-  },
+    type:Boolean,
+    default:0
+  }, 
   createdAt: {
     type: Date,
     default: Date.now

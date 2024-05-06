@@ -34,6 +34,9 @@ adminRoute.get('/customer',adminController.loadCustomer)
 adminRoute.get('/category',adminController.loadCategory)
 adminRoute.post('/category',adminController.addCatogeries)
 adminRoute.get('/products',adminController.loadProduct)
+adminRoute.get('/addproduct',adminController.loadAddProducts)
+adminRoute.get('/customer/:id',adminController.customerAction)
+
 
 
 module.exports=adminRoute

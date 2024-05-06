@@ -489,7 +489,7 @@ th {
 }
 
 tbody,td,tfoot,th,thead,tr {
-    padding-right: 100px;
+    padding-right: 80px;
     border-color: inherit;
     border-style: solid;
     border: width 1px;

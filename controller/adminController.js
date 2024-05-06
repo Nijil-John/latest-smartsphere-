@@ -49,6 +49,7 @@ const adminRegister = async(req,res)=>{
         password: securedPassword,
         isAdmin: true,
         isVerified: true,
+        blocked:false
         })
         console.log(newAdmin);
      
@@ -133,11 +134,37 @@ const loadCustomer = async (req,res)=>{
 }
 
 
+/* block /unblock the customer */
+const customerAction = async (req,res)=>{
+    try {
+        const userId =req.params.id
+        const userData= await user.findOne({_id:userId})
+        if(userId){
+           if(userData.blocked === false){
+            const block=await user.updateOne({ _id: userId }, { $set: { blocked: true } })
+            
+            console.log(block + "its blocked");
+           }else{
+            const unblock=await user.updateOne({ _id: userId }, { $set: { blocked: false } })
+            console.log(unblock+"its unblocked");
+            
+           }
+
+        }
+    } catch (error) {
+        console.log(error.message +" its here");
+    }
+}
+
+
+
+
 
 /* Category settings */
 const loadCategory =async(req,res)=>{
    try {
     if(req.session){
+
         console.log(req.session);
         const categoryData = await category.find({})
         const admin = req.session
@@ -176,7 +203,16 @@ const loadProduct = async (req,res)=>{
         console.log(error.message);
     }
 }
+/* add products */
 
+const loadAddProducts= async(req,res)=>{
+    try {
+        const categoryData= await category.find({})
+        res.render('adminAddProduct',{admin:"new",categories:categoryData})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 
 
@@ -188,7 +224,16 @@ module.exports={
     adminDashboard,
     adminLogout,
     loadCustomer,
+    customerAction,
+
+
+
     loadCategory,
     addCatogeries,
+
+
+
     loadProduct,
+    loadAddProducts,
+
 }

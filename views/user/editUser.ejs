@@ -230,13 +230,13 @@
 				 } %>
                   <form action="/edit" method="post">
                     <label for="name">Name  :</label>
-                    <input type="text" id="name" name="name" placeholder="<%= users.name %>"><br><br>
+                    <input type="text" id="name" name="name" value="<%= users.name %>"><br><br>
                     
                     <label for="email">Email  :</label>
-                    <input type="email" id="email" name="email" placeholder="<%= users.email %>"  > <br><br>
+                    <input type="email" id="email" name="email" value="<%= users.email %>"  > <br><br>
                     
                     <label for="mobile">Mobile Number  :</label>
-                    <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" placeholder="<%= users.mobile %>" ><br><br>
+                    <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" value="<%= users.mobile %>" ><br><br>
                     
                     <input type="submit" value="Update Data">
                   </form>

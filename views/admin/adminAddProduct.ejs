@@ -1,13 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modernize Free</title>
     <link rel="shortcut icon" type="image/png" href="images/logos/favicon.png" />
     <link rel="stylesheet" href="css/styles.min.css" />
-    <link rel="stylesheet" href="css/customerStyle.css">
 </head>
 
 <body>
@@ -62,7 +61,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/order" aria-expanded="false">
+                            <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-cards"></i>
                                 </span>
@@ -78,7 +77,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/sales_report" aria-expanded="false">
+                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-typography"></i>
                                 </span>
@@ -87,7 +86,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/banner_management" aria-expanded="false">
+                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
@@ -95,14 +94,16 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="coupon_management" aria-expanded="false">
+                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-user-plus"></i>
                                 </span>
                                 <span class="hide-menu">Coupon Management</span>
                             </a>
                         </li>
+
                     </ul>
+
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -121,15 +122,17 @@
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
+
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <!--  -->
+                       
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="images/profile/user-1.jpg" alt="" width="35" height="35"
-                                        class="rounded-circle" />
+                                        class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                     aria-labelledby="drop2">
@@ -137,11 +140,7 @@
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3">
-                                                <p class="color:black">
-                                                    <%= admin.name %>
-                                                </p>
-                                            </p>
+                                            <p class="mb-0 fs-3"> <%= admin.name %> </p>
                                         </a>
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
@@ -152,7 +151,7 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a> -->
-                                        <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                        <a href="admin/logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
                                 </div>
                             </li>
@@ -169,67 +168,81 @@
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                     <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Customer Dashboard</h5>
+                                        <h5 class="card-title fw-semibold">Add Product</h5>
                                     </div>
                                     <div>
-                                        <form action="">
-                                            <input type="text" placeholder="search by user name,email,mobile..."
-                                                name="search" />
-                                            <input type="submit" value="search" />
-                                        </form>
+                                       
+                                    </div>
+                                    <div>
+                                        
                                     </div>
                                 </div>
-                                <table width="60%" id="adminDashboardTable">
-                                    <tr class="admindashboardTableRow">
-                                        <th> Name</th>
-                                        <th> Email</th>
-                                        <th> verified</th>
-                                        <th> Mobile</th>
-                                        <th> Block</th>
-                    
-                                    </tr>
-                    
-                                    <% if(user.length>0){
-                                        for(let i=0; i <user.length;i++){ %>
-                                            <tr class="admindashboardTableRow">
-                                                <td>
-                                                    <%= user[i].name %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].email %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].isVerified %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].mobile %>
-                                                </td>
-                                                <td>
-                                                    <% try { %>
-                                                        <% if (user[i].blocked === false) { %>
-                                                            <a onClick="window.location.reload()" href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <%= user[i].blocked %></a>
-                                                        <% } else { %>
-                                                            <a href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <%= user[i].blocked %></a>
-                                                        <% } %>
-                                                    <% } catch (e) { %>
-                                                   
-                                                    <% } %>
-                                                </td>
+                                <div >
+
+                                    
+                                        <form action="/products/add" method="POST">
+                                        <label for="productName">Product Name:</label>
+                                        <input type="text" id="productName" name="productName" required><br><br>
+
+                                        <label for="productPrice">Product Price:</label>
+                                        <input type="number" id="productPrice" name="productPrice" required><br><br>
+
+                                        <label for="productCategory">Product Category:</label>
+                                        <select id="productCategory" name="productCategory">
+                                            <% categories.forEach(category => { %>
+                                                <option value="<%= category._id %>" ><%= category.categoryName %></option>
+                                            <% }); %>
+                                        </select>  <br><br>
+                                        <label for="productImages">Product Images:</label>
+                                        <input type="file" id="productImages" name="productImages" accept="image/*" multiple><br><br>
+
+                                        <label for="productDescription">Product Description:</label><br>
+                                        <textarea id="productDescription" name="productDescription" rows="4" cols="50" required></textarea><br><br>
+
+                                        <button type="submit">Add Product</button>
+                                    </form>
+
+
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <!-- Yearly Breakup -->
+                                <div class="card overflow-hidden">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+
+                                                <div class="d-flex align-items-center">
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
                                                 
-                                              
-                    
-                                            </tr>
-                                            <% } }else{ %>
-                                                <tr class="admindashboardTableRow">
-                                                    <td colspan="5">users Not found</td>
-                                                </tr>
-                    
-                                                <% } %>
-                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
+
             </div>
         </div>
     </div>
