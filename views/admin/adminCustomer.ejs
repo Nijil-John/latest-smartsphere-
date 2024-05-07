@@ -204,17 +204,28 @@
                                                 <td>
                                                     <%= user[i].mobile %>
                                                 </td>
-                                                <td>
+                                                <td id="refreshableHeader" onclick="refreshHeader()">
                                                     <% try { %>
                                                         <% if (user[i].blocked === false) { %>
-                                                            <a onClick="window.location.reload()" href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <%= user[i].blocked %></a>
+                                                            <a href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <%= user[i].blocked %></a>
                                                         <% } else { %>
                                                             <a href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <%= user[i].blocked %></a>
                                                         <% } %>
                                                     <% } catch (e) { %>
                                                    
                                                     <% } %>
+                                                    <script>
+                                                        function refreshHeader() {
+                                                            var header = document.getElementById("refreshableHeader");
+                                                            // Update the header content
+                                                            header.innerHTML = 'blocked';
+                                                        }
+                                                    </script>
+
+
+
                                                 </td>
+                                                
                                                 
                                               
                     
