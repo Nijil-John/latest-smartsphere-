@@ -176,7 +176,7 @@ const loadCategory =async(req,res)=>{
 }
 const addCatogeries = async(req,res)=>{
     try {
-        console.log(req.body)
+       
         const addCategory= new category({
             categoryId:req.body.categoryId,
             categoryName:req.body.categoryName,
@@ -191,11 +191,82 @@ const addCatogeries = async(req,res)=>{
     }
 }
 
+/* edit category */
+const editCategory = async(req,res)=>{
+    try {
+        const categoryId = req.query._id
+        console.log(categoryId);
+        const catId= await category.findOne({_id:categoryId})
+        res.render('editCategory',{admin:"true",user:"new" ,category:catId})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updateCategory =async(req,res)=>{
+    try {
+        
+        const catId= req.query._id
+        console.log(catId+ " catid");
+        /*const cId=req.body.categoryId
+        const cNam=req.body.categoryName
+        const cDes=req.body.categoryDescription
+        console.log(cId+" id "+cNam+" name "+cDes+" des");
+         const categoryData = await category.findOne({_id:categoryId})
+        console.log(categoryData+" db data");
+       if(categoryData===req.body){
+        res.redirect('/admin/category')
+       }else{} */
+                const catUp = await category.updateOne(
+                    { _id: catId }, // Use catId obtained from req.query._id
+                    {
+                        $set: {
+                            categoryId: req.body.categoryId, // Accessing values from req.body
+                            categoryName: req.body.categoryName,
+                            categoryDescription: req.body.categoryDescription
+                        }
+                    }
+                );
+    
+            res.redirect('/admin/category')
+            console.log(catUp);
+       
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const categoryAction = async (req,res)=>{
+    try {
+        const catId =req.params.id
+        console.log(catId);
+        const categoryData= await category.findOne({_id:catId})
+        if(catId){
+           if(categoryData.categoryIsDeleted === false){
+            const block=await category.updateOne({ _id: catId }, { $set: { categoryIsDeleted: true } })
+            
+            console.log(block + "its blocked");
+           }else{
+            const unblock=await category.updateOne({ _id: catId }, { $set: { categoryIsDeleted: false } })
+            console.log(unblock+"its unblocked");
+            
+           }
+        }else{
+            console.log('data is not here');
+        }
+    } catch (error) {
+        console.log(error.message +" its here");
+    }
+}
+
+
+
 
 
 /* products Settings */
 const loadProduct = async (req,res)=>{
     try {
+        console.log(req.body);
         if(req.session){
             res.render('adminProduct',{admin:"new",user:"old"})
         }
@@ -216,6 +287,19 @@ const loadAddProducts= async(req,res)=>{
 
 
 
+/* order settings */
+const orderLoad = async(req,res)=>{
+    try {
+        res.render('adminOrder',{admin:"old"})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+
 module.exports={
     adminLoadlogin,
     adminLoadregister,
@@ -230,10 +314,14 @@ module.exports={
 
     loadCategory,
     addCatogeries,
+    editCategory,
+    updateCategory,
+    categoryAction,
 
 
 
     loadProduct,
     loadAddProducts,
+    orderLoad,
 
 }

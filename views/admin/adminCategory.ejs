@@ -171,7 +171,7 @@
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                     <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Sales Overview</h5>
+                                        <h5 class="card-title fw-semibold">Categories List</h5>
                                     </div>
                                     <div>
                                         <form action="">
@@ -188,7 +188,8 @@
                                             <th>Category Id</th>
                                             <th>Category Name</th>
                                             <th>Number of Products</th>
-                                            <th>Actions</th>
+                                            <th>Edit</th>
+                                            <th>Block</th>
 
                                         </tr>
 
@@ -204,8 +205,20 @@
                                                     <td>
                                                         <%= category[i].categoryDescription %>
                                                     </td>
-                                                    <td><a href="#">live</a></td>
-                                                    <!-- /admin/edit-category?id=<%= category[i]._id %> -->
+                                                    <td><a href="/admin/editCategory?_id=<%= category[i]._id %>">Edit</a></td>
+                                                    <td id="refreshableHeader" onclick="refreshHeader()">
+                                                        <a href="category/<%= category[i]._id %>"><i class="fa fa-user-o"></i> <span id="blockedValue"><%= category[i].categoryIsDeleted  %></span></a>
+                                                        <script>
+                                                            function refreshHeader() {
+                                                                var blockedSpan = document.getElementById("blockedValue");
+                                                                // Assuming user[i].blocked contains the current value
+                                                                var currentValue = blockedSpan.innerText;
+                                                                // Update the span content
+                                                                blockedSpan.innerText = currentValue === "true" ? "false" : "true";
+                                                            }
+                                                        </script>
+                                                    </td>
+                                                    
 
                                                 </tr>
                                                 <% } }else{ %>
@@ -237,11 +250,11 @@
                         <div class="card w-100">
                             <div class="card-body p-4">
                                 <div class="mb-4">
-                                    <h5 class="card-title fw-semibold">Recent Transactions</h5>
+                                    <h5 class="card-title fw-semibold">Add Category</h5>
                                 </div>
 
                                 <form action="/admin/category" method="POST">
-                                    <label for="categoryName">Category Number:</label><br>
+                                    <label for="categoryName">Category Id:</label><br>
                                     <input type="text" id="categoryName" name="categoryId" required><br><br>
                                     <label for="categoryName">Category Name:</label><br>
                                     <input type="text" id="categoryName" name="categoryName" required><br><br>

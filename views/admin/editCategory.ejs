@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modernize Free</title>
     <link rel="shortcut icon" type="image/png" href="images/logos/favicon.png" />
     <link rel="stylesheet" href="css/styles.min.css" />
-    <link rel="stylesheet" href="css/customerStyle.css">
+   
 </head>
 
 <body>
@@ -78,7 +78,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/sales_report" aria-expanded="false">
+                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-typography"></i>
                                 </span>
@@ -87,7 +87,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/banner_management" aria-expanded="false">
+                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
@@ -95,14 +95,16 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="coupon_management" aria-expanded="false">
+                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-user-plus"></i>
                                 </span>
                                 <span class="hide-menu">Coupon Management</span>
                             </a>
                         </li>
+
                     </ul>
+
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -121,15 +123,19 @@
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
+
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <!--  -->
+                        <p>
+                            <%= admin.name %>
+                        </p>
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="images/profile/user-1.jpg" alt="" width="35" height="35"
-                                        class="rounded-circle" />
+                                        class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                     aria-labelledby="drop2">
@@ -137,11 +143,7 @@
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3">
-                                                <p class="color:black">
-                                                    <%= admin.name %>
-                                                </p>
-                                            </p>
+                                            <p class="mb-0 fs-3">My Profile</p>
                                         </a>
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
@@ -169,7 +171,7 @@
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                     <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Customer Dashboard</h5>
+                                        <h5 class="card-title fw-semibold">Categories List</h5>
                                     </div>
                                     <div>
                                         <form action="">
@@ -179,76 +181,59 @@
                                         </form>
                                     </div>
                                 </div>
-                                <table width="60%" id="adminDashboardTable">
-                                    <tr class="admindashboardTableRow">
-                                        <th> Name</th>
-                                        <th> Email</th>
-                                        <th> verified</th>
-                                        <th> Mobile</th>
-                                        <th> Block</th>
-                    
-                                    </tr>
-                    
-                                    <% if(user.length>0){
-                                        for(let i=0; i <user.length;i++){ %>
-                                            <tr class="admindashboardTableRow">
-                                                <td>
-                                                    <%= user[i].name %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].email %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].isVerified %>
-                                                </td>
-                                                <td>
-                                                    <%= user[i].mobile %>
-                                                </td>
-                                                <td id="refreshableHeader" onclick="refreshHeader()">
-                                                    <a href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <span id="blockedValue"><%= user[i].blocked %></span></a>
-                                                    <script>
-                                                        function refreshHeader() {
-                                                            var blockedSpan = document.getElementById("blockedValue");
-                                                            // Assuming user[i].blocked contains the current value
-                                                            var currentValue = blockedSpan.innerText;
-                                                            // Update the span content
-                                                            blockedSpan.innerText = currentValue === "true" ? "false" : "true";
-                                                        }
-                                                    </script>
-                                                </td>
-                                                
-                                                </td>
-                                                
-                                                </td>
+                                <div>
+
+                                    
 
 
-                                                </td>
-                                                
-                                                
-                                              
-                    
-                                            </tr>
-                                            <% } }else{ %>
-                                                <tr class="admindashboardTableRow">
-                                                    <td colspan="5">users Not found</td>
-                                                </tr>
-                    
-                                                <% } %>
-                                </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-4 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <h5 class="card-title fw-semibold">Edit Category</h5>
+                                </div>
+                                <h1></h1>
+                                <form action="/admin/editCategory?_id=<%= category._id %>" method="POST">
+                                    <label for="categoryName" >Category Id:</label><br>
+                                    <input type="text" id="categoryName" value="<%= category.categoryId %>" name="categoryId" required><br><br>
+                                    <label for="categoryName">Category Name:</label><br>
+                                    <input type="text" id="categoryName" value="<%= category.categoryName %>" name="categoryName" required><br><br>
+                                    <label for="categoryName">Category Description:</label><br>
+                                    <input type="text" id="categoryName" value="<%= category.categoryDescription %>" name="categoryDescription" required><br><br>
+                                    <button class="bg-success" type="submit">Update Category</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
             </div>
         </div>
-    </div>
-    <script src="libs/jquery/dist/jquery.min.js"></script>
-    <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/sidebarmenu.js"></script>
-    <script src="js/app.min.js"></script>
-    <script src="libs/apexcharts/dist/apexcharts.min.js"></script>
-    <script src="libs/simplebar/dist/simplebar.js"></script>
-    <script src="js/dashboard.js"></script>
+        <script src="libs/jquery/dist/jquery.min.js"></script>
+        <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/sidebarmenu.js"></script>
+        <script src="js/app.min.js"></script>
+        <script src="libs/apexcharts/dist/apexcharts.min.js"></script>
+        <script src="libs/simplebar/dist/simplebar.js"></script>
+        <script src="js/dashboard.js"></script>
 </body>
 
 </html>
