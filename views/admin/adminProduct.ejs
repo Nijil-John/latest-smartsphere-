@@ -187,38 +187,49 @@
 
                                     <table width="60%" id="adminDashboardTable">
                                         <tr class="admindashboardTableRow">
+                                            <th> product Id</th>
                                             <th> product Name</th>
-                                            <th> category Id</th>
+                                            <th> category Name</th>
                                             <th> price</th>
                                             <th> Number of units</th>
                                             <th> Actions</th>
                         
                                         </tr>
                         
-                                        <% if(user.length>0){
-                                            for(let i=0; i <user.length;i++){ %>
+                                        <% if(product.length>0){
+                                            for(let i=0; i <product.length;i++){ %>
                                                 <tr class="admindashboardTableRow">
                                                     <td>
-                                                        <%= user[i].name %>
+                                                        <%= product[i].productId %>
                                                     </td>
                                                     <td>
-                                                        <%= user[i].email %>
+                                                        <%= product[i].name %>
+                                                    </td>
+                                                    <td>    
+                                                        <% if (product[i].categoryId) { %>
+                                                            <%= product[i].categoryId.name %> <!-- Assuming 'name' is the field for the category name -->
+                                                        <% } %>
+                                                        
                                                     </td>
                                                     <td>
-                                                        <%= user[i].isVerified %>
+                                                        <%= product[i].price %>
                                                     </td>
                                                     <td>
-                                                        <%= user[i].mobile %>
+                                                        <%= product[i].quantity %>
                                                     </td>
-                                                    <td><a href="#">edit</a></td><!-- /admin/edit-user?id=<%= user[i]._id %> -->
+                                                    <td>
+                                                        <a href="#">edit</a>
+                                                    </td>
                         
                                                 </tr>
                                                 <% } }else{ %>
                                                     <tr class="admindashboardTableRow">
-                                                        <td colspan="5">users Not found</td>
+                                                        <td colspan="5">product Not found</td>
                                                     </tr>
                         
                                                     <% } %>
+
+                                                    
                                     </table>
 
 
@@ -260,7 +271,10 @@
                 </div>
 
 
-
+                <div class="py-6 px-6 text-center">
+                    <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
+                        class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+                </div>
 
             </div>
         </div>

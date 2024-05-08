@@ -204,25 +204,23 @@
                                                 <td>
                                                     <%= user[i].mobile %>
                                                 </td>
-                                                <td id="refreshableHeader" onclick="refreshHeader()">
-                                                    <a href="customer/<%= user[i].id %>"><i class="fa fa-user-o"></i> <span id="blockedValue"><%= user[i].blocked %></span></a>
-                                                    <script>
-                                                        function refreshHeader() {
-                                                            var blockedSpan = document.getElementById("blockedValue");
-                                                            // Assuming user[i].blocked contains the current value
-                                                            var currentValue = blockedSpan.innerText;
-                                                            // Update the span content
-                                                            blockedSpan.innerText = currentValue === "true" ? "false" : "true";
-                                                        }
-                                                    </script>
+                                                <td onclick="refreshHeader('<%= user[i].id %>')">
+                                                    <a href="customer/<%= user[i].id %>">
+                                                        <i class="fa fa-user-o"></i>
+                                                        <span id="blockedValue_<%= user[i].id %>"><%= user[i].blocked %></span>
+                                                    </a>
                                                 </td>
                                                 
-                                                </td>
+                                                <script>
+                                                    function refreshHeader(id) {
+                                                        var blockedSpan = document.getElementById("blockedValue_" + id);
+                                                        // Assuming category[i].categoryIsDeleted contains the current value
+                                                        var currentValue = blockedSpan.innerText;
+                                                        // Update the span content
+                                                        blockedSpan.innerText = currentValue === "true" ? "false" : "true";
+                                                    }
+                                                </script>
                                                 
-                                                </td>
-
-
-                                                </td>
                                                 
                                                 
                                               
@@ -239,6 +237,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="py-6 px-6 text-center">
+                    <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
+                        class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+                </div>
+
             </div>
         </div>
     </div>

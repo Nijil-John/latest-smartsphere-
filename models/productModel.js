@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 const productSchema = mongoose.Schema({
+    productId:{
+        type:Number,
+        required: true
+    },
     name:{
         type:String,
         required : true
@@ -17,16 +21,21 @@ const productSchema = mongoose.Schema({
         ref:'category',
         required : true
     },
-    imageURL:[String]
+    productImage:{
+        type:String
+    }
     ,
     quantity:{
         type:Number,
         required : true
     },
-    delete:{
+    isDelete:{
         type:Boolean,
         default:false,
         required:true
     }
 
 })
+
+const product = mongoose.model("product",productSchema);
+module.exports = product;

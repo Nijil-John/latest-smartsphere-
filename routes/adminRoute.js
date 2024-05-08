@@ -22,7 +22,7 @@ adminRoute.set('view engine', 'ejs');
 adminRoute.set("views","./views/admin");
 
 adminRoute.use(caches())
-
+const uploadImage = require('../middleware/upload')
 const adminController = require('../controller/adminController');
 const nocache = require("nocache");
 
@@ -42,6 +42,7 @@ adminRoute.get('/category/:id',adminController.categoryAction)
 
 adminRoute.get('/products',adminController.loadProduct)
 adminRoute.get('/addproduct',adminController.loadAddProducts)
+adminRoute.post('/addproduct',uploadImage.single('productImages'),adminController.AddProducts)
 adminRoute.get('/customer/:id',adminController.customerAction)
 
 adminRoute.get('/order',adminController.orderLoad)

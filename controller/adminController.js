@@ -2,6 +2,7 @@ const admin = require('../models/adminModel')
 const bcrypt = require("bcrypt")
 const user =require('../models/userModel')
 const category=require('../models/categoryModel')
+const product = require('../models/productModel')
 
 
 /* admin settings */
@@ -109,7 +110,7 @@ const adminLogout = async (req, res) => {
       console.log(error.message);
     }
   };
-  /* customer settingd */
+  /* customer settings */
 const loadCustomer = async (req,res)=>{
     try {
         if(req.session){
@@ -132,8 +133,6 @@ const loadCustomer = async (req,res)=>{
         console.log(error.message+" customer")
     }
 }
-
-
 /* block /unblock the customer */
 const customerAction = async (req,res)=>{
     try {
@@ -190,7 +189,6 @@ const addCatogeries = async(req,res)=>{
         console.log(error.message+' cateory adding issue');
     }
 }
-
 /* edit category */
 const editCategory = async(req,res)=>{
     try {
@@ -266,20 +264,49 @@ const categoryAction = async (req,res)=>{
 /* products Settings */
 const loadProduct = async (req,res)=>{
     try {
+        const categoryData = await category.find({})
+        const productData =await product.find({})
+        console.log(productData +" here101");
+        console.log(req.session)
         console.log(req.body);
         if(req.session){
-            res.render('adminProduct',{admin:"new",user:"old"})
+            res.render('adminProduct',{admin:"new",product:productData,user:'new',category:categoryData})
         }
     } catch (error) {
         console.log(error.message);
     }
 }
 /* add products */
-
 const loadAddProducts= async(req,res)=>{
     try {
         const categoryData= await category.find({})
         res.render('adminAddProduct',{admin:"new",categories:categoryData})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const AddProducts= async(req,res)=>{
+    try {
+        console.log(req.body);
+        const categoryData= await category.find({})
+        const addProduct = new product({
+            productId:req.body.productId,
+            name:req.body.productName,
+            description:req.body.productDescription,
+            price:req.body.productPrice,
+            categoryId:req.body.productCategory,
+           // productImage:req.body.productImages,
+            quantity:req.body.productQuantity,
+        })
+        if(req.file){
+            addProduct.productImages=req.file.path
+        }
+        console.log(addProduct);
+        const dbProduct = await addProduct.save()
+
+        console.log(dbProduct);
+        res.redirect('/admin/products')
     } catch (error) {
         console.log(error.message)
     }
@@ -322,6 +349,7 @@ module.exports={
 
     loadProduct,
     loadAddProducts,
+    AddProducts,
     orderLoad,
 
 }
