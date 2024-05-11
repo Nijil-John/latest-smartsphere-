@@ -4,7 +4,7 @@ const userOTP = mongoose.Schema({
     email:String,
     otp:String,
 
-    
+    //expire
     createdAt: {
         type: Date,
         default:Date.now

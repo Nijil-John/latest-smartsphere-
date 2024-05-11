@@ -94,8 +94,8 @@ const adminVerifyLogin =async(req,res)=>{
 }
 const adminDashboard =async (req,res)=>{
     try {
-        console.log(req.session);
-        const adminData=req.session
+        //console.log(req.session);
+        const adminData=req.session.adminData
         res.render('adminDashboard',{admin:adminData})
     } catch (error) {
         console.log(error.message);

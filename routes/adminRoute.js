@@ -12,13 +12,13 @@ adminRoute.use(session({
 }))
 
 
-adminRoute.use(express.urlencoded({ extended: true }));
-adminRoute.use(express.json())
+adminRoute.use(express.urlencoded({ extended: true }));//--
+adminRoute.use(express.json())//--
 
 adminRoute.use(express.static('adminAsset'))
 /* adminRoute.use(express.static(path.join(__dirname,'adminAsset'))) */
 
-adminRoute.set('view engine', 'ejs');
+adminRoute.set('view engine', 'ejs');//--
 adminRoute.set("views","./views/admin");
 
 adminRoute.use(caches())
