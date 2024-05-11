@@ -2,15 +2,24 @@ const  User = require('../models/userModel')
 const otpUser=require('../models/otpModel')
 const bcrypt= require('bcrypt')
 const nodemailer= require('nodemailer')
+const address= require('../models/adressModel')
+const { render } = require('../routes/userRoute')
 
 
 
 
 const loadhome=async (req,res)=>{
     try {
-        res.render('home')
+        if (req.session.user_id) {
+          const userData = await User.findOne({_id:req.session.user_id})
+          res.render('home',{users:userData})
+          
+        } else {
+          res.render('home')
+        }
+       
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message+" 20");
     }
 }
 
@@ -232,6 +241,115 @@ const saveUserData = async (req,res)=>{
 }
 
 
+/* user Address */
+const userAdress = async(req,res)=>{
+  try {
+    console.log(req.session);
+    const addressData = await address.find({userId:req.session.user_id})
+    const userData = await User.findOne({_id:req.session.user_id})
+    res.render('userAddress',{users: userData ,address:addressData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const loadAddAddress = async(req,res)=>{
+  try {
+    if (req.session.user_id) {
+      
+      const userData = await User.findOne({_id:req.session.user_id})
+      res.render('addAddress',{users:userData})
+    } else {
+      
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+const saveAddress =async(req,res)=>{
+  try {
+    console.log(req.body);
+    if(req.session.user_id){
+      const addressData = new address({
+        userId:req.session.user_id,
+        name:req.body.name,
+        mobile:req.body.mobile,
+        address:req.body.address,
+        pincode:req.body.pincode,
+        state:req.body.state,
+        city:req.body.city,
+        isDefault:false
+      })
+      const savedAddress= await addressData.save()
+      console.log(savedAddress);
+      res.redirect('/address')
+    }    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+const loadEditAddress = async(req,res)=>{
+  try {
+    const addId =req.query._id
+    if(addId){
+      addressData=await address.findById({_id:addId})
+      userData =await User.findById({_id:addressData.userId})
+      res.render('editAddress',{users:userData,address:addressData})}
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const updateAddress =async (req,res)=>{
+  try {
+    const addId = req.query._id
+    console.log(addId+" hits here");
+    if(addId){
+      addressData=await address.findById({_id:addId})
+      userData =await User.findById({_id:addressData.userId})
+      console.log(req.body.name+"hit user");
+      console.log(addressData+"hit address"); 
+      const addUp = await address.updateOne(
+        { _id: addId }, // Use catId obtained from req.query._id
+        {
+            $set: {
+              name:req.body.name,
+              mobile:req.body.mobile,
+              address:req.body.address,
+              pincode:req.body.pincode,
+              state:req.body.state,
+              city:req.body.city
+            }
+        }
+    )
+    console.log(addUp);
+     res.redirect('/address')
+    }
+  } catch (error) {
+    console.log(error.message +"error here");
+  }
+}
+const deleteAddress = async(req,res)=>{
+  try {
+    const addId = req.params.id
+    console.log(addId+" address id");
+    const check = await address.deleteOne({_id:addId})
+    console.log(check+' here 339')
+    
+    res.redirect('/address');
+
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
+
 
 
 module.exports={
@@ -246,4 +364,12 @@ module.exports={
     userProfile,
     loadeditUserData,
     saveUserData,
+    userAdress,
+    loadAddAddress,
+    saveAddress,    
+    loadEditAddress,
+    updateAddress,
+    deleteAddress,
+
+
 }

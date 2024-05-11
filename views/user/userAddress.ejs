@@ -23,8 +23,10 @@
 
  		<!-- Font Awesome Icon -->
  		<link rel="stylesheet" href="css/font-awesome.min.css">
-		<!-- css for login page -->
-		<link rel="stylesheet" href="css/login.css">
+
+		<!-- css profile -->
+		<link rel="stylesheet" href="/css/profileDash.css">
+	
  		<!-- Custom stlylesheet -->
  		<link type="text/css" rel="stylesheet" href="css/style.css"/>
 
@@ -43,15 +45,16 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +91-944-695-7604</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> smartsphere@yopmail.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 110047 delhi</a></li>
+						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-inr"></i> INR</a></li>
+						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
 						<% try { %>
 							<% if (users) { %>
 								<li><a href="profile"><i class="fa fa-user-o"></i> <%= users.name %></a></li>
+								
 							<% } else { %>
 								
 							<% } %>
@@ -171,30 +174,8 @@
 		</header>
 		<!-- /HEADER -->
 
-		<!-- NAVIGATION -->
-		<nav id="navigation">
-			<!-- container -->
-			<div class="container">
-				<!-- responsive-nav -->
-				<div id="responsive-nav">
-					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
-					</ul>
-					<!-- /NAV -->
-				</div>
-				<!-- /responsive-nav -->
-			</div>
-			<!-- /container -->
-		</nav>
-		<!-- /NAVIGATION -->
-
+		
+ 
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
@@ -202,10 +183,10 @@
 				<!-- row -->
 				<div class="row">
 					<div class="col-md-12">
-						<h3 class="breadcrumb-header">login</h3>
+						<h3 class="breadcrumb-header"></h3>
 						<ul class="breadcrumb-tree">
 							<li><a href="#">Home</a></li>
-							<li class="active">login</li>
+							<li class="active">Manage Address</li>
 						</ul>
 					</div>
 				</div>
@@ -228,84 +209,59 @@
 		</div>
 		<!-- /SECTION -->
 
+       
+		<!-- Side navigation -->
+			<div class="check">
+				<div class="sidenav">
+					<a href="/profile">Hello, <%= users.name %></a>
+					<a href="#">My Order</a>
+					<a href="#">Wallet</a>
+					<a href="/address">Manage Address</a>
+					<a href="#">My Wishlist</a>
+					<a href="/logout"><button class="logout-button">logout</button></a>
+ 				 </div>
+  				<!-- Page content -->
+  				
 
-
-
-
-		<div class="login-container">
-			<form class="login-form" action="/login" method="POST">
-				<h2>Login</h2>
-				<% if(typeof message !=="undefined" ){
-					%>
-					<p style="color: green;"><%= message %></p>
-					<%
-				 } %>
-				<div class="form-group">
-					<label for="username">Email:</label>
-					<input type="text" id="username" name="email" required>
-				</div>
-				<div class="form-group">
-					<label for="password">Password:</label>
-					<input type="password" id="password" name="password" required>
-				</div>
-				<button type="submit">Login</button>
-				<div class="form-links">
-					<a href="#">Forgot Password?</a>
-					<span>|</span>
-					<a href="/userRegister">Create New Account</a>
-				</div>
-			</form>
-		</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		<!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-							</form>
-							<ul class="newsletter-follow">
+				  <div class="main">
+					<a href="/addaddress"><button class="bg-primary" type="button">Add address</button></a>
+					<div class="address">
+						<ul>
+							<% address.forEach(function(address) { %>
 								<li>
-									<a href="#"><i class="fa fa-facebook"></i></a>
+									<br><br>
+									
+									<strong>Name : </strong> <%= address.name %> ,
+									<strong>Mobile :</strong> <%= address.mobile %>,
+									<strong>Address :</strong> <%= address.address %><br>
+									<strong>Pincode :</strong> <%= address.pincode %>
+									<strong>State:</strong> <%= address.state %>
+									<strong>City:</strong> <%= address.city %>
+								<!-- 	<strong>Is Default:</strong> <%= address.isDefault %> -->
+									<br>
+									<a href="/aEdit?_id=<%= address._id	%> ">Edit</a>
+									<a href="address/<%= address._id %> "> Delete</a>
 								</li>
-								<li>
-									<a href="#"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
-						</div>
+								<br><br>
+							<% }); %>
+						</ul>
 					</div>
-				</div>
-				<!-- /row -->
+
+					<ul>
+						<li>
+							
+						</li>
+						<li>
+							
+						</li>
+					</ul>
+  					</div>
 			</div>
-			<!-- /container -->
-		</div>
-		<!-- /NEWSLETTER -->
+
+
+
+
+		
 
 		<!-- FOOTER -->
 		<footer id="footer">

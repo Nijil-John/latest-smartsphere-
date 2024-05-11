@@ -32,6 +32,12 @@ userRoute.post('/otp',userController.confirmOtp)
 userRoute.get('/profile',userController.userProfile)
 userRoute.get('/edit',userController.loadeditUserData)
 userRoute.post('/edit',userController.saveUserData)
+userRoute.get('/address',userController.userAdress)
+userRoute.get('/addaddress',userController.loadAddAddress)
+userRoute.post('/addaddress',userController.saveAddress)
+userRoute.get('/aEdit',userController.loadEditAddress)
+userRoute.post('/aEdit',userController.updateAddress)
+userRoute.get('/address/:id',userController.deleteAddress)
 
 
 
