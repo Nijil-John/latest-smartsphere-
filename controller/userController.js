@@ -183,7 +183,7 @@ const verifyUserLogin = async (req, res) => {
 const logout = async (req,res)=>{
   try {
     req.session.destroy()
-    res.render("home")
+    res.redirect("/")
 } catch (error) {
     console.log(error.message);
 }

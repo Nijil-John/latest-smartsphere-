@@ -7,6 +7,13 @@ const port = 3000
 
 
 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json())
+
+app.set('view engine', 'ejs');
+
+
 const adminRoute = require("./routes/adminRoute")//adminroute from routes
 const userRoute = require("./routes/userRoute")//user from routes
 

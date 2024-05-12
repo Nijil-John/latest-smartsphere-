@@ -7,7 +7,8 @@ const userOTP = mongoose.Schema({
     //expire
     createdAt: {
         type: Date,
-        default:Date.now
+        default:Date.now,
+        expires:60
       }
 })
 const otpUser = mongoose.model("userotp",userOTP);

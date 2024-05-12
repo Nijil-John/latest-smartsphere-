@@ -209,6 +209,7 @@
                                         <label for="productImages">Product Images:</label>
                                         <input type="file" id="productImages" name="productImages" accept="image/*"
                                             multiple><br><br>
+                                            <div id="imagePreview"></div>
 
                                         <label for="productDescription">Product Description:</label><br>
                                         <textarea id="productDescription" name="productDescription" rows="4" cols="50"
@@ -217,6 +218,46 @@
                                         <button class="bg-success " type="submit">Add Product</button>
                                     </form>
 
+                                
+                                    <script>
+                                        // Function to handle file input change event
+                                        function handleFileInputChange(event) {
+                                            const files = event.target.files;
+
+                                            // Clear previous previews
+                                            document.getElementById('imagePreview').innerHTML = '';
+
+                                            // Loop through selected files
+                                            for (let i = 0; i < files.length; i++) {
+                                                const file = files[i];
+                                                
+                                                // Ensure the selected file is an image
+                                                if (file.type.match('image.*')) {
+                                                    const reader = new FileReader();
+
+                                                    // Read the image file
+                                                    reader.onload = function (e) {
+                                                        // Create an <img> element for preview
+                                                        const img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.width = 80; // Set width for preview image
+                                                        img.height =100; // Set height for preview image
+                                                        img.className = 'previewImage'; // Add a class for styling
+
+                                                        // Append the preview image to the imagePreview div
+                                                        document.getElementById('imagePreview').appendChild(img);
+                                                    };
+
+                                                    // Read the image file as a data URL
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }
+                                        }
+
+                                        // Attach event listener to file input
+                                        document.getElementById('productImages').addEventListener('change', handleFileInputChange);
+
+                                    </script>
 
 
 

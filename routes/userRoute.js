@@ -4,9 +4,6 @@ const session = require('express-session')
 const nocache =require('nocache')
 
 
-userRoute.use(express.urlencoded({ extended: true }));
-userRoute.use(express.json())
-
 const config = require('../config/config')
 userRoute.use(session({
     secret:config.sessionSecret,
@@ -15,7 +12,7 @@ userRoute.use(session({
 }))
 
 userRoute.use(express.static('userAssets'))
-userRoute.set('view engine', 'ejs');
+
 userRoute.set("views","./views/user");
 
 userRoute.use(nocache())

@@ -229,31 +229,109 @@
                         <h2>Address Form</h2>
                             <form action="/aEdit?_id=<%= address._id %> " method="POST">
                                 <label for="name">Name:</label>
-                                <input type="text" value="<%= address.name %>" id="name" name="name" required><br><br>
+                                <input type="text" value="<%= address.name %>" id="name" name="name"><br><br>
 
                                 <label for="mobile">Mobile:</label>
-                                <input type="number" id="mobile" value="<%= address.mobile %>" name="mobile"  required><br>
+                                <input type="number" id="mobile" value="<%= address.mobile %>" name="mobile" ><br>
 
                                 <label for="address">Address:</label>
-                                <input type="text" id="address" value="<%= address.address %>" name="address" required><br><br>
+                                <input type="text" id="address" value="<%= address.address %>" name="address"><br><br>
 
                                 <label for="pincode">Pincode:</label>
-                                <input type="number" id="pincode" value="<%= address.pincode %>" name="pincode" required><br><br>
+                                <input type="number" id="pincode" value="<%= address.pincode %>" name="pincode"><br><br>
 
                                 <label for="state">State:</label>
-                                <input type="text" id="state" value=" <%= address.state %>" name="state" required><br><br>
+                                <input type="text" id="state" value=" <%= address.state %>" name="state"><br><br>
 
                                 <label for="city">City:</label>
-                                <input type="text" id="city" name="city" value="<%= address.city %>" required><br><br>
+                                <input type="text" id="city" name="city" value="<%= address.city %>"><br><br>
 
                                 <!-- <label for="isDefault">Is Default:</label><br>
-                                <select id="isDefault" name="isDefault" required>
+                                <select id="isDefault" name="isDefault">
                                     <option value="true">True</option>
                                     <option value="false">False</option>
                                 </select><br><br> -->
 
                                 <input type="submit" class="bg-primary" value="Update"><br>
                             </form>
+
+							<script>
+								document.addEventListener('DOMContentLoaded', function () {
+								const form = document.querySelector('form');
+
+								form.addEventListener('submit', function (event) {
+									// Prevent the form from submitting
+									event.preventDefault();
+
+									// Validate name
+									const nameInput = document.getElementById('name');
+									const nameValue = nameInput.value.trim();
+
+									if (nameValue === '') {
+										alert('Please enter a name');
+										nameInput.focus();
+										return;
+									}
+
+									// Validate mobile number
+									const mobileInput = document.getElementById('mobile');
+									const mobileValue = mobileInput.value.trim();
+
+									// Check if mobile number is empty or not a number
+									if (mobileValue === '' || isNaN(mobileValue)) {
+										alert('Please enter a valid mobile number');
+										mobileInput.focus();
+										return;
+									}
+
+									// Validate address
+									const addressInput = document.getElementById('address');
+									const addressValue = addressInput.value.trim();
+
+									if (addressValue === '') {
+										alert('Please enter an address');
+										addressInput.focus();
+										return;
+									}
+
+									// Validate pincode
+									const pincodeInput = document.getElementById('pincode');
+									const pincodeValue = pincodeInput.value.trim();
+
+									// Check if pincode is empty or not a number
+									if (pincodeValue === '' || isNaN(pincodeValue)) {
+										alert('Please enter a valid pincode');
+										pincodeInput.focus();
+										return;
+									}
+
+									// Validate state
+									const stateInput = document.getElementById('state');
+									const stateValue = stateInput.value.trim();
+
+									if (stateValue === '') {
+										alert('Please enter a state');
+										stateInput.focus();
+										return;
+									}
+
+									// Validate city
+									const cityInput = document.getElementById('city');
+									const cityValue = cityInput.value.trim();
+
+									if (cityValue === '') {
+										alert('Please enter a city');
+										cityInput.focus();
+										return;
+									}
+
+									// If all validations pass, submit the form
+									this.submit();
+								});
+							});
+
+
+							</script>
 					</div>
 
 					
