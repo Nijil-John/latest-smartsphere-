@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const user =require('../models/userModel')
 const category=require('../models/categoryModel')
 const product = require('../models/productModel')
+const path = require('path')
 
 
 /* admin settings */
@@ -192,10 +193,11 @@ const addCatogeries = async(req,res)=>{
 /* edit category */
 const editCategory = async(req,res)=>{
     try {
+        const adminData =req.session.adminData
         const categoryId = req.query._id
         console.log(categoryId);
         const catId= await category.findOne({_id:categoryId})
-        res.render('editCategory',{admin:"true",user:"new" ,category:catId})
+        res.render('editCategory',{admin:adminData,user:"new" ,category:catId})
     } catch (error) {
         console.log(error.message);
     }
@@ -264,18 +266,51 @@ const categoryAction = async (req,res)=>{
 /* products Settings */
 const loadProduct = async (req,res)=>{
     try {
-        const categoryData = await category.find({})
-        const productData =await product.find({})
-        console.log(productData +" here101");
-        console.log(req.session)
-        console.log(req.body);
-        if(req.session){
-            res.render('adminProduct',{admin:"new",product:productData,user:'new',category:categoryData})
+        const adminData =req.session.adminData
+        // Perform aggregation to join Product collection with Category collection
+    const productsWithCategory = await product.aggregate([
+      {
+        $lookup: {
+          from: 'categories', // Name of the Category collection
+          localField: 'categoryId', // Field in the Product collection
+          foreignField: '_id', // Field in the Category collection
+          as: 'category' // Name of the field to store the matched category data
         }
+      },
+      {
+        $unwind: '$category' // Deconstruct the category array created by $lookup
+      },
+      {
+        $project: {
+          _id: 1,
+          productId:1,
+          name: 1,
+          description: 1,
+          price: 1,
+          quantity:1,
+          categoryName: '$category.categoryName' // Extract the category name
+        }
+      }
+    ]);
+    console.log( productsWithCategory);
+    // Render the product details with category name
+    res.render('adminProduct', { product: productsWithCategory ,admin:"new"});
     } catch (error) {
         console.log(error.message);
     }
 }
+// product image check
+const imageCheck = async (req, res) => {
+    try {
+       
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error'); // Send an error response if there's an issue
+    }
+};
+
+
+
 /* add products */
 const loadAddProducts= async(req,res)=>{
     try {
@@ -289,6 +324,9 @@ const loadAddProducts= async(req,res)=>{
 const AddProducts= async(req,res)=>{
     try {
         console.log(req.body);
+      
+        const images = req.files.map(file => file.path);
+       
         const categoryData= await category.find({})
         const addProduct = new product({
             productId:req.body.productId,
@@ -296,19 +334,17 @@ const AddProducts= async(req,res)=>{
             description:req.body.productDescription,
             price:req.body.productPrice,
             categoryId:req.body.productCategory,
-           // productImage:req.body.productImages,
+            productImage: images,
             quantity:req.body.productQuantity,
         })
-        if(req.file){
-            addProduct.productImages=req.file.path
-        }
+        
         console.log(addProduct);
         const dbProduct = await addProduct.save()
 
         console.log(dbProduct);
         res.redirect('/admin/products')
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message +" here addproduct")
     }
 }
 
@@ -352,4 +388,5 @@ module.exports={
     AddProducts,
     orderLoad,
 
+    imageCheck,
 }

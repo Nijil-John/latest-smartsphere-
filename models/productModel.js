@@ -21,9 +21,10 @@ const productSchema = mongoose.Schema({
         ref:'category',
         required : true
     },
-    productImage:{
-        type:String
-    }
+    productImage:[{
+        type: String, // Assuming you store image URLs
+        required: true
+      }]
     ,
     quantity:{
         type:Number,

@@ -3,34 +3,26 @@ const multer = require('multer')
 
 
 const storage = multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,'productAssets/')
+    destination: (req, file, cb) => {
+      cb(null, 'productAssets/');
     },
-    filename:function(req,file,cb){
-        let ext = path.extname(file.originalname)
-        cb(null,Date.now() +ext)
-    }
-})
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    },
+  });
 
 
-var upload =multer({
-    storage:storage,
-    fileFilter: function(req, file, cb) {
-        if (
-            file.mimetype === 'image/png' ||
-            file.mimetype === 'image/jpg' ||
-            file.mimetype === 'image/jpeg'
-        ) {
-            cb(null, true); // Accept the file
-        } else {
-            console.log('Only JPG and PNG files are supported');
-            cb(null, false); // Reject the file
-        }
-    
-        limits:{
-            fileSize :1024*1024 *2
-        }}
-})
+  const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+      } else {
+        cb(new Error('Invalid file type'));
+      }
+    },
+    limits: { fileSize: 10000000 }, // 10MB file size limit
+  });
 
 
 module.exports=upload

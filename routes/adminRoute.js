@@ -41,10 +41,13 @@ adminRoute.get('/category/:id',adminController.categoryAction)
 
 adminRoute.get('/products',adminController.loadProduct)
 adminRoute.get('/addproduct',adminController.loadAddProducts)
-adminRoute.post('/addproduct',uploadImage.single('productImages'),adminController.AddProducts)
+adminRoute.post('/addproduct',uploadImage.array('productImages', 4),adminController.AddProducts)
 adminRoute.get('/customer/:id',adminController.customerAction)
 
 adminRoute.get('/order',adminController.orderLoad)
+
+
+adminRoute.get('/sample',adminController.imageCheck)
 
 
 
