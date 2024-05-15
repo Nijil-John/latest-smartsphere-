@@ -5,6 +5,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use('/admin/productAssets', express.static('productAssets'));
 
 
 app.use(express.urlencoded({ extended: true }));

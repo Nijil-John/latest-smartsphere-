@@ -125,9 +125,7 @@
 
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <p>
-                            <%= admin.name %>
-                        </p>
+
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
                             <li class="nav-item dropdown">
@@ -142,7 +140,9 @@
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3"><%= admin.name %></p>
+                                            <p class="mb-0 fs-3">
+                                                <%= admin.name %>
+                                            </p>
                                         </a>
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
@@ -153,7 +153,8 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a> -->
-                                        <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                        <a href="admin/logout"
+                                            class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
                                 </div>
                             </li>
@@ -170,112 +171,103 @@
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                     <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Sales Overview</h5>
+                                        <h5 class="card-title fw-semibold">Add Product</h5>
                                     </div>
                                     <div>
-                                        <a href="/admin/addproduct"> add products</a>
+
                                     </div>
                                     <div>
-                                        <form action="">
-                                            <input type="text" placeholder="search by user name,email,mobile..."
-                                                name="search" />
-                                            <input type="submit" value="search" />
-                                        </form>
+
                                     </div>
                                 </div>
-                                <div >
-
-                                    <table width="60%" id="adminDashboardTable">
-                                        <tr class="admindashboardTableRow">
-                                            <th> product Id</th>
-                                            <th> product Name</th>
-                                            <th> category Name</th>
-                                            <th> price</th>
-                                            <th> Number of units</th>
-                                            <th> Images </th>
-                                            <th> Actions</th>
-                        
-                                        </tr>
-                        
-                                        <% if(product.length>0){
-                                            for(let i=0; i <product.length;i++){ %>
-                                                <tr class="admindashboardTableRow">
-                                                    <td>
-                                                        <%= product[i].productId %>
-                                                    </td>
-                                                    <td>
-                                                        <%= product[i].name %>
-                                                    </td>
-                                                    <td>    
-                                                        <%= product[i].categoryName %>
-                                                        
-                                                    </td>
-                                                    <td>
-                                                        <%= product[i].price %>
-                                                    </td>
-                                                    <td>
-                                                        <%= product[i].quantity %>
-                                                    </td>
-                                                    <td>
-                                                        <% for(let j = 0; j < product[i].productImage.length; j++) { %>
-                                                            <% // Replace backslashes with forward slashes in image path %>
-                                                            <% let imagePath = product[i].productImage[j].replace(/\\/g, '/'); %>
-                                                            <img src="<%= imagePath %>" alt="Product Image">
-                                                        <% } %>
-                                                       
-                                                    </td>
-                                                    <td>
-                                                        <a href="/admin/editproduct?_id=<%= product[i].productId %>">edit</a>
-                                                    </td>
-                        
-                                                </tr>
-                                                <% } }else{ %>
-                                                    <tr class="admindashboardTableRow">
-                                                        <td colspan="5">product Not found</td>
-                                                    </tr>
-                        
-                                                    <% } %>
-
-                                                    
-                                    </table>
+                                <div>
 
 
+                                    <form action="/admin/editproduct" method="POST" enctype="multipart/form-data">
+                                        <label for="productId">Product Id:</label>
+                                        <input type="text" id="productId" name="productId" value=" <%= product.name %>" required><br><br>
 
+                                        <label for="productName">Product Name:</label>
+                                        <input type="text" id="productName" name="productName" required><br><br>
 
+                                        <label for="productPrice">Product Price:</label>
+                                        <input type="number" id="productPrice" name="productPrice" required><br><br>
 
+                                        <label for="productQuantity">Product Quantity:</label>
+                                        <input type="text" id="productQuantity" name="productQuantity" required><br><br>
+                                        <label for="productCategory">Product Category:</label>
+                                        <select id="productCategory" name="productCategory">
+                                           
+                                            
+                                        </select> <br><br>
+                                        <label for="productImages">Product Images:</label>
+                                        <input type="file" id="productImages" name="productImages" accept="image/*"
+                                            multiple><br><br>
+                                            <div id="imagePreview"></div>
 
+                                        <label for="productDescription">Product Description:</label><br>
+                                        <textarea id="productDescription" name="productDescription" rows="4" cols="50"
+                                            required></textarea><br><br>
 
+                                        <button class="bg-success " type="submit">Add Product</button>
 
+                                    </form>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <!-- Yearly Breakup -->
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-4">
-                                        <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
+                                
+                                    <script>
+                                        // Function to handle file input change event
+                                        function handleFileInputChange(event) {
+                                            const files = event.target.files;
 
-                                                <div class="d-flex align-items-center">
-                                                    
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
+                                            // Clear previous previews
+                                            document.getElementById('imagePreview').innerHTML = '';
+
+                                            // Loop through selected files
+                                            for (let i = 0; i < files.length; i++) {
+                                                const file = files[i];
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
+                                                // Ensure the selected file is an image
+                                                if (file.type.match('image.*')) {
+                                                    const reader = new FileReader();
+
+                                                    // Read the image file
+                                                    reader.onload = function (e) {
+                                                        // Create an <img> element for preview
+                                                        const img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.width = 80; // Set width for preview image
+                                                        img.height =100; // Set height for preview image
+                                                        img.className = 'previewImage'; // Add a class for styling
+
+                                                        // Append the preview image to the imagePreview div
+                                                        document.getElementById('imagePreview').appendChild(img);
+                                                    };
+
+                                                    // Read the image file as a data URL
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }
+                                        }
+
+                                        // Attach event listener to file input
+                                        document.getElementById('productImages').addEventListener('change', handleFileInputChange);
+
+                                    </script>
+
+
+
+
+
+
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
+
 
 
                 <div class="py-6 px-6 text-center">

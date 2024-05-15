@@ -288,6 +288,7 @@ const loadProduct = async (req,res)=>{
           description: 1,
           price: 1,
           quantity:1,
+          productImage:1,
           categoryName: '$category.categoryName' // Extract the category name
         }
       }
@@ -308,6 +309,27 @@ const imageCheck = async (req, res) => {
         res.status(500).send('Internal Server Error'); // Send an error response if there's an issue
     }
 };
+
+//edit product 
+const editProduct = async(req,res)=>{
+    try {
+        const prodt = req.query._id
+        proData =await product.findOne({productId:prodt})
+        const catData = await category.find({})
+        res.render('editProduct',{admin:"new",product:proData,categories:catData})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updateProduct = async(req,res)=>{
+    try {
+        console.log(req.query._id);
+    } catch (error) {
+        console.log(error.message);
+    }
+} 
+
 
 
 
@@ -386,6 +408,11 @@ module.exports={
     loadProduct,
     loadAddProducts,
     AddProducts,
+    editProduct,
+    updateProduct,
+
+
+
     orderLoad,
 
     imageCheck,
