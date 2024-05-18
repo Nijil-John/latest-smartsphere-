@@ -19,11 +19,11 @@ adminRoute.use(express.static('adminAsset'))
 
 
 adminRoute.set("views","./views/admin");
-
-adminRoute.use(caches())
+const nocache = require("nocache");
+adminRoute.use(nocache())
 const uploadImage = require('../middleware/upload')
 const adminController = require('../controller/adminController');
-const nocache = require("nocache");
+
 
 adminRoute.get('/',adminController.adminLoadlogin)
 adminRoute.get('/register',adminController.adminLoadregister)
@@ -32,18 +32,28 @@ adminRoute.post('/',adminController.adminVerifyLogin)
 adminRoute.get('/adminDashboard',adminController.adminDashboard)
 adminRoute.get('/logout',adminController.adminLogout)
 adminRoute.get('/customer',adminController.loadCustomer)
-adminRoute.get('/category',adminController.loadCategory)
-adminRoute.post('/category',adminController.addCatogeries)
-adminRoute.get('/editCategory',adminController.editCategory)
-adminRoute.post('/editCategory',adminController.updateCategory)
-adminRoute.get('/category/:id',adminController.categoryAction)
+
+//category routes
+const categoryController = require('../controller/categoryController')
+
+adminRoute.get('/category',categoryController.loadCategory)
+adminRoute.post('/category',categoryController.addCatogeries)
+adminRoute.get('/editCategory',categoryController.editCategory)
+adminRoute.post('/editCategory',categoryController.updateCategory)
+adminRoute.get('/category/:id',categoryController.categoryAction)
 
 
-adminRoute.get('/products',adminController.loadProduct)
-adminRoute.get('/addproduct',adminController.loadAddProducts)
-adminRoute.post('/addproduct',uploadImage.array('productImages', 4),adminController.AddProducts)
-adminRoute.get('/editproduct',adminController.editProduct)
-adminRoute.post('/editproduct',adminController.updateProduct)
+//product routes
+const productController= require('../controller/productController')
+
+adminRoute.get('/products',productController.loadProduct)
+adminRoute.get('/addproduct',productController.loadAddProducts)
+adminRoute.post('/addproduct',uploadImage.array('productImages', 4),productController.AddProducts)
+adminRoute.get('/editproduct',productController.editProduct)
+adminRoute.post('/editproduct',productController.updateProduct)
+
+adminRoute.get('/products/:id',productController.productAction)
+
 
 
 
@@ -52,7 +62,9 @@ adminRoute.get('/customer/:id',adminController.customerAction)
 adminRoute.get('/order',adminController.orderLoad)
 
 
-adminRoute.get('/sample',adminController.imageCheck)
+//coupon Management
+const couponController = require('../controller/couponController')
+adminRoute.get('/coupon',couponController.loadCoupon)
 
 
 

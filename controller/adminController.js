@@ -105,7 +105,7 @@ const adminDashboard =async (req,res)=>{
 const adminLogout = async (req, res) => {
     try {
       req.session.destroy();
-      res.render("adminLogin",{message:'logout succcesfully'});
+      res.redirect('/admin/')
       console.log(req.session);
     } catch (error) {
       console.log(error.message);
@@ -149,226 +149,13 @@ const customerAction = async (req,res)=>{
             console.log(unblock+"its unblocked");
             
            }
-
+           
         }
     } catch (error) {
         console.log(error.message +" its here");
     }
 }
 
-
-
-
-
-/* Category settings */
-const loadCategory =async(req,res)=>{
-   try {
-    if(req.session){
-
-        console.log(req.session);
-        const categoryData = await category.find({})
-        const admin = req.session
-        res.render('adminCategory',{admin:admin,category:categoryData,user:"new"})
-    }
-   } catch (error) {
-    console.log(error.message);
-   }
-}
-const addCatogeries = async(req,res)=>{
-    try {
-       
-        const addCategory= new category({
-            categoryId:req.body.categoryId,
-            categoryName:req.body.categoryName,
-            categoryDescription :req.body.categoryDescription
-        })
-        const categoryData= await addCategory.save()
-        if(categoryData){
-            res.redirect('/admin/category')
-        }
-    } catch (error) {
-        console.log(error.message+' cateory adding issue');
-    }
-}
-/* edit category */
-const editCategory = async(req,res)=>{
-    try {
-        const adminData =req.session.adminData
-        const categoryId = req.query._id
-        console.log(categoryId);
-        const catId= await category.findOne({_id:categoryId})
-        res.render('editCategory',{admin:adminData,user:"new" ,category:catId})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const updateCategory =async(req,res)=>{
-    try {
-        
-        const catId= req.query._id
-        console.log(catId+ " catid");
-        /*const cId=req.body.categoryId
-        const cNam=req.body.categoryName
-        const cDes=req.body.categoryDescription
-        console.log(cId+" id "+cNam+" name "+cDes+" des");
-         const categoryData = await category.findOne({_id:categoryId})
-        console.log(categoryData+" db data");
-       if(categoryData===req.body){
-        res.redirect('/admin/category')
-       }else{} */
-                const catUp = await category.updateOne(
-                    { _id: catId }, // Use catId obtained from req.query._id
-                    {
-                        $set: {
-                            categoryId: req.body.categoryId, // Accessing values from req.body
-                            categoryName: req.body.categoryName,
-                            categoryDescription: req.body.categoryDescription
-                        }
-                    }
-                );
-    
-            res.redirect('/admin/category')
-            console.log(catUp);
-       
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const categoryAction = async (req,res)=>{
-    try {
-        const catId =req.params.id
-        console.log(catId);
-        const categoryData= await category.findOne({_id:catId})
-        if(catId){
-           if(categoryData.categoryIsDeleted === false){
-            const block=await category.updateOne({ _id: catId }, { $set: { categoryIsDeleted: true } })
-            
-            console.log(block + "its blocked");
-           }else{
-            const unblock=await category.updateOne({ _id: catId }, { $set: { categoryIsDeleted: false } })
-            console.log(unblock+"its unblocked");
-            
-           }
-        }else{
-            console.log('data is not here');
-        }
-    } catch (error) {
-        console.log(error.message +" its here");
-    }
-}
-
-
-
-
-
-/* products Settings */
-const loadProduct = async (req,res)=>{
-    try {
-        const adminData =req.session.adminData
-        // Perform aggregation to join Product collection with Category collection
-    const productsWithCategory = await product.aggregate([
-      {
-        $lookup: {
-          from: 'categories', // Name of the Category collection
-          localField: 'categoryId', // Field in the Product collection
-          foreignField: '_id', // Field in the Category collection
-          as: 'category' // Name of the field to store the matched category data
-        }
-      },
-      {
-        $unwind: '$category' // Deconstruct the category array created by $lookup
-      },
-      {
-        $project: {
-          _id: 1,
-          productId:1,
-          name: 1,
-          description: 1,
-          price: 1,
-          quantity:1,
-          productImage:1,
-          categoryName: '$category.categoryName' // Extract the category name
-        }
-      }
-    ]);
-    console.log( productsWithCategory);
-    // Render the product details with category name
-    res.render('adminProduct', { product: productsWithCategory ,admin:"new"});
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-// product image check
-const imageCheck = async (req, res) => {
-    try {
-       
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Internal Server Error'); // Send an error response if there's an issue
-    }
-};
-
-//edit product 
-const editProduct = async(req,res)=>{
-    try {
-        const prodt = req.query._id
-        proData =await product.findOne({productId:prodt})
-        const catData = await category.find({})
-        res.render('editProduct',{admin:"new",product:proData,categories:catData})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const updateProduct = async(req,res)=>{
-    try {
-        console.log(req.query._id);
-    } catch (error) {
-        console.log(error.message);
-    }
-} 
-
-
-
-
-/* add products */
-const loadAddProducts= async(req,res)=>{
-    try {
-        const categoryData= await category.find({})
-        res.render('adminAddProduct',{admin:"new",categories:categoryData})
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-const AddProducts= async(req,res)=>{
-    try {
-        console.log(req.body);
-      
-        const images = req.files.map(file => file.path);
-       
-        const categoryData= await category.find({})
-        const addProduct = new product({
-            productId:req.body.productId,
-            name:req.body.productName,
-            description:req.body.productDescription,
-            price:req.body.productPrice,
-            categoryId:req.body.productCategory,
-            productImage: images,
-            quantity:req.body.productQuantity,
-        })
-        
-        console.log(addProduct);
-        const dbProduct = await addProduct.save()
-
-        console.log(dbProduct);
-        res.redirect('/admin/products')
-    } catch (error) {
-        console.log(error.message +" here addproduct")
-    }
-}
 
 
 
@@ -397,23 +184,10 @@ module.exports={
 
 
 
-    loadCategory,
-    addCatogeries,
-    editCategory,
-    updateCategory,
-    categoryAction,
-
-
-
-    loadProduct,
-    loadAddProducts,
-    AddProducts,
-    editProduct,
-    updateProduct,
 
 
 
     orderLoad,
 
-    imageCheck,
+   
 }

@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const categoryModel = mongoose.Schema({
     categoryId:{
-        type:Number,
+        type:String,
         required: true
     },categoryName:{
         type:String,
