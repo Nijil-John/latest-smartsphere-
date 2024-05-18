@@ -1,8 +1,7 @@
-const mongoose =require("mongoose")
-mongoose.connect("mongodb://127.0.0.1:27017/eCommerce")
-
 const express = require('express')
+const Database = require('./config/Database')
 const app = express()
+Database.connectDb() //database connections
 const port = 3000
 
 app.use('/admin/productAssets', express.static('productAssets'));

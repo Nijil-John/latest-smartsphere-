@@ -1,0 +1,37 @@
+/* Style the table */
+#admindashboardTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Style table headers */
+  .admindashboardTableRow th {
+    padding: 8px;
+    text-align: center;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Style table rows */
+  .admindashboardTableRow td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Style table rows on hover */
+  .admindashboardTableRow:hover {
+    background-color: #f2f2f2;
+  }
+  
+  /* Style image container */
+  .image-container {
+    display: flex;
+  }
+  
+  /* Style images */
+  .admindashboardTableRow img {
+    max-width: 80px; /* Adjust as needed */
+    height: auto;
+    margin-right: 10px; /* Adjust spacing between images */
+  }
+ 

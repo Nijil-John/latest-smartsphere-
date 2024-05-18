@@ -489,6 +489,7 @@ th {
 }
 
 tbody,td,tfoot,th,thead,tr {
+    padding-left: 10px;
     padding-right: 80px;
     border-color: inherit;
     border-style: solid;
