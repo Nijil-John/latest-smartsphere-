@@ -173,6 +173,9 @@
                                     <div class="mb-3 mb-sm-0">
                                         <h5 class="card-title fw-semibold">Categories List</h5>
                                     </div>
+                                    <div class="mb-3 mb-sm-0">
+                                      <a href="/admin/addcategory">Add Category</a>  
+                                    </div>
                                     <div>
                                         <form action="">
                                             <input type="text" placeholder="search by user name,email,mobile..."
@@ -203,7 +206,7 @@
                                                         <%= category[i].categoryName %>
                                                     </td>
                                                     <td>
-                                                        <%= category[i].categoryDescription %>
+                                                        <%= category[i].productCount %>
                                                     </td>
                                                     <td><a href="/admin/editCategory?_id=<%= category[i]._id %>">Edit</a></td>
                                                     <td onclick="refreshHeader('<%= category[i]._id %>')">
@@ -234,7 +237,13 @@
                                         <% } %>
                                     </table>
 
-
+                                    <div class="pagination">
+                                        <% for(let i = 1; i <= totalPages; i++) { %>
+                                            <a href="/admin/category?page=<%= i %>&limit=<%= limit %>" class="<%= page === i ? 'active' : '' %>">
+                                                <%= i %>
+                                            </a>
+                                        <% } %>
+                                    </div>
 
 
                                 </div>
@@ -253,21 +262,7 @@
                 <div class="row">
                     <div class="col-lg-4 d-flex align-items-stretch">
                         <div class="card w-100">
-                            <div class="card-body p-4">
-                                <div class="mb-4">
-                                    <h5 class="card-title fw-semibold">Add Category</h5>
-                                </div>
-
-                                <form action="/admin/category" method="POST">
-                                   <!--  <label for="categoryName">Category Id:</label><br>
-                                    <input type="text" id="categoryName" name="categoryId" required><br><br> -->
-                                    <label for="categoryName">Category Name:</label><br>
-                                    <input type="text" id="categoryName" name="categoryName" required><br><br>
-                                    <label for="categoryName">Category Description:</label><br>
-                                    <input type="text" id="categoryName" name="categoryDescription" required><br><br>
-                                    <button type="submit">Add Category</button>
-                                </form>
-                            </div>
+                            
                         </div>
                     </div>
 

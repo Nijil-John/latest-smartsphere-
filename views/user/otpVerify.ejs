@@ -239,6 +239,11 @@
         <div class="otp-container">
             <form class="otp-form" action="/otp" method="POST">
                 <h2>OTP Verification</h2>
+				<% if(typeof message !=="undefined" ){
+					%>
+					<p style="color: green;"><%= message %></p>
+					<%
+				 } %>
                 <div class="form-group">
                     <label for="otp">Enter OTP:</label>
                     <input type="text" id="otp" name="otp" required>

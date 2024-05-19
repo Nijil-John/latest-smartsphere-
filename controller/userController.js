@@ -146,6 +146,7 @@ const confirmOtp = async (req, res) => {
       res.render('home',{users:Vuser})
     } else {
       console.log("failed");
+      res.render('otpVerify',{message:"otp is incorrect"})
     }
   } catch (error) {
     console.log(error.message+"otp101");

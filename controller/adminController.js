@@ -4,6 +4,7 @@ const user =require('../models/userModel')
 const category=require('../models/categoryModel')
 const product = require('../models/productModel')
 const path = require('path')
+const { Query } = require('mongoose')
 
 
 /* admin settings */
@@ -112,7 +113,7 @@ const adminLogout = async (req, res) => {
     }
   };
   /* customer settings */
-const loadCustomer = async (req,res)=>{
+/* const loadCustomer = async (req,res)=>{
     try {
         if(req.session){
             var search = "";
@@ -133,7 +134,43 @@ const loadCustomer = async (req,res)=>{
     } catch (error) {
         console.log(error.message+" customer")
     }
+} */
+
+const loadCustomer= async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    try {
+        const users = await user.find().skip(skip).limit(limit);
+        const userCount = await user.countDocuments();
+
+        if (skip >= userCount) {
+            return res.status(404).send('Page not found');
+        }
+
+        res.render('adminCustomer', {
+            user:users,
+            admin:req.session,
+            page,
+            totalPages: Math.ceil(userCount / limit),
+            limit,
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 /* block /unblock the customer */
 const customerAction = async (req,res)=>{
     try {
@@ -156,7 +193,18 @@ const customerAction = async (req,res)=>{
     }
 }
 
-
+/* //pagination
+const page = rerq.query.page*1|| 1;
+const limit=req.query.limit*1|| 10;
+//page 1:1-10,2:11-20,3:21-30
+const skip =(page-1)*limit
+query=query.skip(skip).limit(limit)
+if(req.query.page){
+    const userCount =await user.countdocument()
+    if(skip>= userCount){
+        console.log('this is not working');
+    }
+} */
 
 
 /* order settings */

@@ -8,20 +8,75 @@ const ShortUniqueId=async()=>{
 }
 
 /* Category settings */
-const loadCategory =async(req,res)=>{
+const loadCategory = async (req, res) => {
     try {
-     if(req.session.adminData){
-        if (req.query.search) {
-            search = req.query.search;
-          }
- 
-         console.log(req.session.adminData);
-         const categoryData = await category.find({})
-         const admin = req.session.adminData
-         res.render('adminCategory',{admin:admin,category:categoryData,user:"new"})
-     }
+        if (req.session.adminData) {
+            const search = req.query.search || '';
+
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const skip = (page - 1) * limit;
+
+            // Use aggregation to fetch categories with product counts and apply pagination
+            const categoriesWithProductCount = await category.aggregate([
+                {
+                    $match: {
+                        categoryName: { $regex: search, $options: 'i' } // Filter categories based on search
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'products', // name of the collection to join with
+                        localField: '_id',
+                        foreignField: 'categoryId',
+                        as: 'products'
+                    }
+                },
+                {
+                    $project: {
+                        categoryName: 1, // include the category name
+                        categoryId: 1,
+                        categoryIsDeleted: 1,
+                        productCount: { $size: '$products' } // add a field for the number of products
+                    }
+                },
+                { $skip: skip },
+                { $limit: limit }
+            ]);
+
+            // Count total categories for pagination
+            const totalCategories = await category.countDocuments({
+                categoryName: { $regex: search, $options: 'i' }
+            });
+
+            // If skip is greater than or equal to total category count, return 404
+            if (skip >= totalCategories) {
+                return res.status(404).send('Page not found');
+            }
+
+            const admin = req.session.adminData;
+            res.render('adminCategory', {
+                admin: admin,
+                category: categoriesWithProductCount,
+                user: "new",
+                page,
+                totalPages: Math.ceil(totalCategories / limit),
+                limit,
+                search
+            });
+        }
     } catch (error) {
-     console.log(error.message);
+        console.log(error.message);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+ const loadAddCategory = async(req,res)=>{
+    try {
+        res.render('adminAddCategory',{admin:"new",user:"old"})
+
+    } catch (error) {
+        console.log(error.message);
     }
  }
  const addCatogeries = async(req,res)=>{
@@ -125,6 +180,7 @@ module.exports={
     editCategory,
     updateCategory,
     categoryAction,
+    loadAddCategory,
 
     ShortUniqueId
 

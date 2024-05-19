@@ -261,7 +261,13 @@
                                     </table>
 
 
-
+                                    <div class="pagination">
+                                        <% for(let i = 1; i <= totalPages; i++) { %>
+                                            <a href="/admin/product?page=<%= i %>&limit=<%= limit %>" class="<%= page === i ? 'active' : '' %>">
+                                                <%= i %>
+                                            </a>
+                                        <% } %>
+                                    </div>
 
 
 

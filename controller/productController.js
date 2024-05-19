@@ -3,44 +3,65 @@ const category= require('../models/categoryModel')
 const catcontroller =require('./categoryController')
 
 /* products Settings */
-const loadProduct = async (req,res)=>{
+const loadProduct = async (req, res) => {
     try {
-        const adminData =req.session.adminData
-        console.log(adminData);
-        // Perform aggregation to join Product collection with Category collection
-    const productsWithCategory = await product.aggregate([
-      {
-        $lookup: {
-          from: 'categories', // Name of the Category collection
-          localField: 'categoryId', // Field in the Product collection
-          foreignField: '_id', // Field in the Category collection
-          as: 'category' // Name of the field to store the matched category data
+        const adminData = req.session.adminData;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        // Perform aggregation to join Product collection with Category collection and apply pagination
+        const productsWithCategory = await product.aggregate([
+            {
+                $lookup: {
+                    from: 'categories', // Name of the Category collection
+                    localField: 'categoryId', // Field in the Product collection
+                    foreignField: '_id', // Field in the Category collection
+                    as: 'category' // Name of the field to store the matched category data
+                }
+            },
+            {
+                $unwind: '$category' // Deconstruct the category array created by $lookup
+            },
+            {
+                $project: {
+                    _id: 1,
+                    productId: 1,
+                    name: 1,
+                    description: 1,
+                    price: 1,
+                    quantity: 1,
+                    productImage: 1,
+                    categoryName: '$category.categoryName', // Extract the category name
+                    isDelete: 1
+                }
+            },
+            { $skip: skip },
+            { $limit: limit }
+        ]);
+
+        // Count total products for pagination
+        const totalProducts = await product.countDocuments();
+
+        // If skip is greater than or equal to total product count, return 404
+        if (skip >= totalProducts) {
+            return res.status(404).send('Page not found');
         }
-      },
-      {
-        $unwind: '$category' // Deconstruct the category array created by $lookup
-      },
-      {
-        $project: {
-          _id: 1,
-          productId:1,
-          name: 1,
-          description: 1,
-          price: 1,
-          quantity:1,
-          productImage:1,
-          categoryName: '$category.categoryName' ,// Extract the category name
-          isDelete:1
-        }
-      }
-    ]);
-    //console.log( productsWithCategory);
-    // Render the product details with category name
-    res.render('adminProduct', { product: productsWithCategory ,admin:adminData});
+
+        // Render the product details with category name and pagination data
+        res.render('adminProduct', {
+            product: productsWithCategory,
+            admin: adminData,
+            page,
+            totalPages: Math.ceil(totalProducts / limit),
+            limit
+        });
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 // product image check
 const imageCheck = async (req, res) => {
     try {
