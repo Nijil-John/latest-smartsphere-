@@ -64,7 +64,7 @@ const sendOtpMail = async (name, email, mobile, user_id, otp) => {
       from: "importantOtp@gmail.com",
       to: email,
       subject: `Verification mail`,
-      html: `<p>Hello ${name},this is your OTP: ${otp}.,mobile no:${mobile}, ${user_id}  Please do not share it with anyone.</p>`
+      html: `<p>Hello ${name},this is your OTP: ${otp}.,mobile no:${mobile},Please do not share it with anyone.</p>`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -93,17 +93,14 @@ const insertUser = async (req, res) => {
         message: "mobile is already in use ",
       });
     }
-    const newUser = new User({
+    req.session.userData ={
       name: req.body.name,
+      phone: req.body.mobile,
       email: req.body.email,
-      mobile: req.body.mobile,
       password: secureUserPasswd,
-      isVerified: false,
-      isAdmin:false,
-     
-    });
-    console.log(newUser);
-    const userData = await newUser.save();
+    };
+    console.log(req.session.userData);
+    /* */
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
     const newOtp = new otpUser({
@@ -113,14 +110,14 @@ const insertUser = async (req, res) => {
 
     const otpData = await newOtp.save();
     console.log(otpData);
-    if (userData) {
-      sendOtpMail(req.body.name,req.body.email,req.body.mobile,userData._id,otpData.otp);
-      res.render("otpVerify", { message: "your registration is successfull" });
+    if (req.session.userData) {
+      sendOtpMail(req.body.name,req.body.email,req.body.mobile,otpData.otp);
+      res.render('otpVerify');
     } else {
       res.render("userRegister", { message: "failed to save the data" });
     }
   } catch (error) {
-    console.log(error.message + "11");
+    console.log(error.message );
   }
 };
 
@@ -134,24 +131,47 @@ const loadOtp= async (req,res)=>{
 
 const confirmOtp = async (req, res) => {
   try {
-    const otpdetails= await otpUser.findOne({ otp: req.body.otp })
-    const email =otpdetails.email;
-    const otp = req.body.otp;
-    const Vuser = await User.findOne({ email: email });
+    const sUser = req.session.userData
+    console.log(sUser.email);
+    savedOtp = await otpUser.findOne({email:sUser.email})
+    console.log(savedOtp.otp);
+    enteredOtp = req.body.otp
+    console.log(enteredOtp);
+    if(savedOtp.otp === enteredOtp){
+      const newUser = new User({
+        name: sUser.name,
+        email: sUser.email,
+        mobile: sUser.phone,
+        password: sUser.password,
+        isVerified: true,
+        isAdmin:false
+       
+      }); 
+      const userData = await newUser.save();
+      res.redirect('/')
 
-    if (otpdetails.otp === otp) {
-      const updateInfo = await User.updateOne({ email: email }, { $set: { isVerified: true } });
-     /*  console.log(updateInfo);
-      console.log('Update successful'); */
-      res.render('home',{users:Vuser})
-    } else {
-      console.log("failed");
-      res.render('otpVerify',{message:"otp is incorrect"})
+    }else{
+      res.render('otpVerify',{message:'wrong otp'})
     }
   } catch (error) {
     console.log(error.message+"otp101");
   }
 };
+
+const resendOtp = async(req,res)=>{
+  try {
+    const sUser = req.session.userData
+    savedOtp = await otpUser.findOne({email:sUser.email})
+    if (sUser) {
+      sendOtpMail(sUser.name,sUser.email,sUser.phone,savedOtp.otp);
+      res.render('otpVerify',{message:"Opt resend confirmed"});
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 
 const verifyUserLogin = async (req, res) => {
   try {
@@ -361,6 +381,7 @@ module.exports={
     insertUser,
     loadOtp,
     confirmOtp,
+    resendOtp,
     logout,
     userProfile,
     loadeditUserData,

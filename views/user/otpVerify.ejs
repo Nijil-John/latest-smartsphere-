@@ -237,23 +237,66 @@
 
 
         <div class="otp-container">
-            <form class="otp-form" action="/otp" method="POST">
-                <h2>OTP Verification</h2>
-				<% if(typeof message !=="undefined" ){
-					%>
+			<form class="otp-form" action="/otp" method="POST">
+				<h2>OTP Verification</h2>
+				<% if(typeof message !=="undefined" ){ %>
 					<p style="color: green;"><%= message %></p>
-					<%
-				 } %>
-                <div class="form-group">
-                    <label for="otp">Enter OTP:</label>
-                    <input type="text" id="otp" name="otp" required>
-                </div>
-                <div class="form-group">
-                    <button type="button" id="resend">Resend OTP</button>
-                    <span id="timer"></span>
-                </div>
-                <button type="submit">Verify OTP</button>
-            </form>
+				<% } %>
+				<div class="form-group">
+					<label for="otp">Enter OTP:</label>
+					<input type="text" id="otp" name="otp" required>
+				</div>
+				<div class="form-group">
+					<button type="button" id="resend" class="hidden"><a href="/resend">Resend OTP</a></button>
+					<span id="timer"></span>
+				</div>
+				<button type="submit">Verify OTP</button>
+			</form>
+		
+			<script>
+				// Timer duration in seconds (1.5 minutes = 90 seconds)
+				let duration = 90;
+				let timerElement = document.getElementById('timer');
+				let resendButton = document.getElementById('resend');
+		
+				// Function to update the timer
+				function updateTimer() {
+					let minutes = Math.floor(duration / 60);
+					let seconds = duration % 60;
+		
+					// Add leading zero if seconds are less than 10
+					seconds = seconds < 10 ? '0' + seconds : seconds;
+		
+					// Display the timer
+					timerElement.textContent = `Resend OTP in ${minutes}:${seconds}`;
+		
+					// Decrease duration by 1 second
+					duration--;
+		
+					// When the timer reaches zero
+					if (duration < 0) {
+						clearInterval(timerInterval);
+						timerElement.textContent = '';
+						resendButton.classList.remove('hidden');
+					}
+				}
+		
+				// Initialize the timer
+				let timerInterval = setInterval(updateTimer, 1000);
+		
+				// Initially disable the resend button
+				resendButton.classList.add('hidden');
+		
+				// Add click event to the resend button
+				resendButton.addEventListener('click', function() {
+					// Logic to resend the OTP can go here
+		
+					// Reset the timer
+					duration = 90;
+					resendButton.classList.add('hidden');
+					timerInterval = setInterval(updateTimer, 1000);
+				});
+			</script>
         </div>
 
 
