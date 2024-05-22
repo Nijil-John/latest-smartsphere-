@@ -213,7 +213,7 @@ const userProfile = async(req,res)=>{
   try {
     const _id =req.session.user_id
     const userData= await User.findOne({_id:_id})
-    console.log(userData);
+    //console.log(userData);
     res.render('userProfile',{users:userData})
   } catch (error) {
     console.log(error.message);
@@ -234,28 +234,31 @@ const saveUserData = async (req,res)=>{
   try {
     console.log(req.session)
     console.log(req.body);
-    const _id =req.session.user_id
-    const userData= await User.findOne({_id:_id})
+    const id =req.session.user_id
+    console.log(id);
+    const userData= await User.findOne({_id:id})
     console.log(userData);
-    const userEmail= await otpUser.findOne({email:userData.email})
-    console.log(userEmail.otp);
+    //const userEmail= await otpUser.findOne({email:userData.email})
+    //console.log(userEmail.otp);
     const name = req.body.name
     const email = req.body.email
     const mobile = req.body.mobile
-    console.log(name,email,mobile);
+    //console.log(name,email,mobile);
     if (userData) {
-      sendOtpMail(req.body.name,req.body.email,req.body.mobile,userData._id,userEmail.otp);
+      /* sendOtpMail(req.body.name,req.body.email,req.body.mobile,userData._id,userEmail.otp);
       res.render("otpVerify", { message: "your registration is successfull" });
-      const flag =1
+       */
+      const updateInfo = await User.updateOne({ _id:id }, { $set: { name:name,email:email,mobile:mobile} })
+    console.log(updateInfo);
+    res.redirect('/profile')
     } else {
       res.render("editUser", { message: "failed to save the data" });
     }
-    if(flag=1){
-      const updateInfo = await User.updateOne({ _id:_id }, { $set: { name:name,email:email,mobile:mobile} })
-    console.log(updateInfo);
+    /* if(flag=1){
+      
     const userNewData= await User.findOne({_id:_id})
     res.render('home',{users:userNewData})
-    }
+    } */
   } catch (error) {
     console.log(error.message +"10010");
   }
