@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express')
 const Database = require('./config/Database')
 const app = express()
 Database.connectDb() //database connections
-const port = 3000
-
+const errorHandler = require('./middleware/errorHandler');
+const port = process.env.PORT 
 app.use('/admin/productAssets', express.static('productAssets'));
 
 
@@ -12,6 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
 app.set('view engine', 'ejs');
+
+// Error handling middleware
+app.use(errorHandler);
 
 
 const adminRoute = require("./routes/adminRoute")//adminroute from routes

@@ -3,7 +3,8 @@ const otpUser=require('../models/otpModel')
 const bcrypt= require('bcrypt')
 const nodemailer= require('nodemailer')
 const address= require('../models/adressModel')
-const { render } = require('../routes/userRoute')
+//const { render } = require('../routes/userRoute')
+require('dotenv').config();
 
 
 
@@ -19,6 +20,7 @@ const loadhome=async (req,res)=>{
         }
        
     } catch (error) {
+      next(error);  // Pass the error to the error handling middleware
         console.log(error.message+" 20");
     }
 }
@@ -28,6 +30,7 @@ const loadLogin =async (req,res)=>{
         res.render('userLogin')
     } catch (error) {
         console.log(error.message);
+        next(error);  // Pass the error to the error handling middleware
     }
 }
 
@@ -36,6 +39,7 @@ const userRegister =async(req,res)=>{
         res.render('userRegister')
     } catch (error) {
         console.log(error.message);
+        next(error);  // Pass the error to the error handling middleware
     }
 }
 
@@ -45,17 +49,18 @@ const securePassword = async (password) => {
     return passwordHash;
   } catch (error) {
     console.log(error.message + " 10");
+    next(error);  // Pass the error to the error handling middleware
   }
 };
 
 //verify mail
-const sendOtpMail = async (name, email, mobile, user_id, otp) => {
+const sendOtpMail = async (name, email, mobile, otp) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "nijiljohn0804@gmail.com",
-        pass: "yfcp xctt gsif lfcp",
+        user: process.env.EMAIL,
+        pass: process.env.APP_CODE
       },
       secure: true, // Set secure to true for a secure connection
       requireTLS: true, // Require TLS for the connection
@@ -76,13 +81,31 @@ const sendOtpMail = async (name, email, mobile, user_id, otp) => {
     });
   } catch (error) {
     console.log(error.message + " - Error occurred."); // Print error message if any other error occurs
+    next(error);  // Pass the error to the error handling middleware
   }
 }
+
+const otpGenarator = async(mail)=>{
+  try {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    //console.log(otp);
+    const newOtp = new otpUser({
+      email: mail,
+      otp: otp
+    });
+    const otpData = await newOtp.save();
+    return otpData
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 const insertUser = async (req, res) => {
   try {
     console.log(req.body);
     const secureUserPasswd = await securePassword(req.body.password);
+    const otpData = await otpGenarator(req.body.email)
     const existingUserEmail = await User.findOne({ email: req.body.email });
     const existingUserMobile = await User.findOne({ mobile: req.body.mobile });
     if (existingUserEmail) {
@@ -99,16 +122,12 @@ const insertUser = async (req, res) => {
       email: req.body.email,
       password: secureUserPasswd,
     };
-    console.log(req.session.userData);
+    //console.log(req.session.userData);
     /* */
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    console.log(otp);
-    const newOtp = new otpUser({
-      email: req.body.email,
-      otp: otp,
-    });
-
-    const otpData = await newOtp.save();
+    
+    
+    console.log(otpData);
+    //const otpData = await newOtp.save();
     console.log(otpData);
     if (req.session.userData) {
       sendOtpMail(req.body.name,req.body.email,req.body.mobile,otpData.otp);
@@ -118,6 +137,7 @@ const insertUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message );
+    next(error);  // Pass the error to the error handling middleware
   }
 };
 
@@ -126,6 +146,7 @@ const loadOtp= async (req,res)=>{
         res.render('otpVerify')
     } catch (error) {
         console.log(error.message)
+        next(error);  // Pass the error to the error handling middleware
     }
 }
 
@@ -148,12 +169,13 @@ const confirmOtp = async (req, res) => {
        
       }); 
       const userData = await newUser.save();
-      res.redirect('/')
+      res.redirect('/login')
 
     }else{
       res.render('otpVerify',{message:'wrong otp'})
     }
   } catch (error) {
+    next(error);  // Pass the error to the error handling middleware
     console.log(error.message+"otp101");
   }
 };
@@ -168,6 +190,7 @@ const resendOtp = async(req,res)=>{
     }
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -198,6 +221,7 @@ const verifyUserLogin = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 };
 
@@ -207,6 +231,7 @@ const logout = async (req,res)=>{
     res.redirect("/")
 } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
 }
 }
 const userProfile = async(req,res)=>{
@@ -217,6 +242,7 @@ const userProfile = async(req,res)=>{
     res.render('userProfile',{users:userData})
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -227,6 +253,7 @@ const loadeditUserData =async (req,res)=>{
     res.render('editUser',{users:userData})
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -261,6 +288,7 @@ const saveUserData = async (req,res)=>{
     } */
   } catch (error) {
     console.log(error.message +"10010");
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -274,6 +302,7 @@ const userAdress = async(req,res)=>{
     res.render('userAddress',{users: userData ,address:addressData})
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -288,6 +317,7 @@ const loadAddAddress = async(req,res)=>{
     }
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -312,8 +342,10 @@ const saveAddress =async(req,res)=>{
     }    
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
+
 const loadEditAddress = async(req,res)=>{
   try {
     const addId =req.query._id
@@ -323,6 +355,7 @@ const loadEditAddress = async(req,res)=>{
       res.render('editAddress',{users:userData,address:addressData})}
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
@@ -353,6 +386,7 @@ const updateAddress =async (req,res)=>{
     }
   } catch (error) {
     console.log(error.message +"error here");
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 const deleteAddress = async(req,res)=>{
@@ -367,9 +401,47 @@ const deleteAddress = async(req,res)=>{
 
   } catch (error) {
     console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
   }
 }
 
+const changePassword = async(req,res)=>{
+  try {
+    const _id =req.session.user_id
+    const userData= await User.findOne({_id:_id})
+    res.render('changePassword',{users:userData})
+    
+  } catch (error) {
+    console.log(error.message);
+    next(error);  // Pass the error to the error handling middleware
+  }
+}
+const updatePassword = async(req,res)=>{
+  try {
+    console.log(req.body);
+    const oldpassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword
+    const secureUserPasswd = await securePassword(newPassword)
+    const _id =req.session.user_id
+    const userData= await User.findOne({_id:_id})
+    console.log(userData);
+    if(userData){
+      const oldCheck = await bcrypt.compare(oldpassword,userData.password)
+      console.log(oldCheck);
+      if (oldCheck) {
+        const upPass = await User.updateOne({_id:_id},{$set: {password:secureUserPasswd}})
+        console.log(upPass);
+        res.redirect('/profile')
+      } else {
+        res.render('changePassword',{users:userData,message:'old password is not correct'})        
+      }
+    }
+
+  } catch (error) {
+    console.log(error.message+" new password update lose");
+    next(error);  // Pass the error to the error handling middleware
+  }
+}
 
 
 
@@ -395,6 +467,8 @@ module.exports={
     loadEditAddress,
     updateAddress,
     deleteAddress,
+    changePassword,
+    updatePassword,
 
 
 }

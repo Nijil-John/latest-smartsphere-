@@ -36,6 +36,8 @@ userRoute.post('/addaddress',userController.saveAddress)
 userRoute.get('/aEdit',userController.loadEditAddress)
 userRoute.post('/aEdit',userController.updateAddress)
 userRoute.get('/address/:id',userController.deleteAddress)
+userRoute.get('/changepassword',userController.changePassword)
+userRoute.post('/changepassword',userController.updatePassword )
 
 
 

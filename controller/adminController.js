@@ -7,6 +7,7 @@ const path = require('path')
 const { Query } = require('mongoose')
 
 
+
 /* admin settings */
 const adminLoadlogin = async(req,res)=>{
     try {
