@@ -183,81 +183,202 @@
                                 <div>
 
 
-                                    <form action="/admin/addproduct" method="POST" enctype="multipart/form-data">
+                                    <form action="/admin/addproduct" method="POST" enctype="multipart/form-data" class="form-container">
                                         <!-- <label for="productId">Product Id:</label>
                                         <input type="text" id="productId" name="productId" required><br><br> -->
-
-                                        <label for="productName">Product Name:</label>
-                                        <input type="text" id="productName" name="productName" required><br><br>
-
-                                        <label for="productPrice">Product Price:</label>
-                                        <input type="text" id="productPrice" name="productPrice" required><br><br>
-
-                                        <label for="productQuantity">Product Quantity:</label>
-                                        <input type="text" id="productQuantity" name="productQuantity" required><br><br>
-
-
-                                        <label for="productCategory">Product Category:</label>
-                                        <select id="productCategory" name="productCategory">
-                                            <option>Please select</option>
-                                            <% categories.forEach(category=> { %>
-                                                <option value="<%= category._id %>">
-                                                    <%= category.categoryName %>
-                                                </option>
+                                    
+                                        <div class="form-group">
+                                            <label for="productName">Product Name:</label>
+                                            <input type="text" id="productName" name="productName" required>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="productPrice">Product Price:</label>
+                                            <input type="text" id="productPrice" name="productPrice" required>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="productQuantity">Product Quantity:</label>
+                                            <input type="text" id="productQuantity" name="productQuantity" required>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="productCategory">Product Category:</label>
+                                            <select id="productCategory" name="productCategory">
+                                                <option>Please select</option>
+                                                <% categories.forEach(category => { %>
+                                                    <option value="<%= category._id %>">
+                                                        <%= category.categoryName %>
+                                                    </option>
                                                 <% }); %>
-                                        </select> <br><br>
-                                        <label for="productImages">Product Images:</label>
-                                        <input type="file" id="productImages" name="productImages" accept="image/*"
-                                            multiple><br><br>
-                                            <div id="imagePreview"></div>
-
-                                        <label for="productDescription">Product Description:</label><br>
-                                        <textarea id="productDescription" name="productDescription" rows="4" cols="50"
-                                            required></textarea><br><br>
-
-                                        <button class="bg-success " type="submit">Add Product</button>
+                                            </select>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="productImages">Product Images:</label>
+                                            <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+                                            <div id="imagePreview" class="image-preview"></div>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="productDescription">Product Description:</label>
+                                            <textarea id="productDescription" name="productDescription" rows="4" cols="50" required></textarea>
+                                        </div>
+                                    
+                                        <button class="submit-button bg-success" type="submit">Add Product</button>
                                     </form>
-
-                                
+                                    
                                     <script>
+                                        let selectedFiles = [];
+                                    
                                         // Function to handle file input change event
                                         function handleFileInputChange(event) {
                                             const files = event.target.files;
-
+                                            selectedFiles = Array.from(files);
+                                            const imagePreview = document.getElementById('imagePreview');
+                                    
                                             // Clear previous previews
-                                            document.getElementById('imagePreview').innerHTML = '';
-
+                                            imagePreview.innerHTML = '';
+                                    
                                             // Loop through selected files
-                                            for (let i = 0; i < files.length; i++) {
-                                                const file = files[i];
-                                                
-                                                // Ensure the selected file is an image
+                                            selectedFiles.forEach((file, index) => {
                                                 if (file.type.match('image.*')) {
                                                     const reader = new FileReader();
-
+                                    
                                                     // Read the image file
                                                     reader.onload = function (e) {
+                                                        // Create a div to hold the image and remove button
+                                                        const imageContainer = document.createElement('div');
+                                                        imageContainer.className = 'imageContainer';
+                                                        imageContainer.dataset.index = index;
+                                    
                                                         // Create an <img> element for preview
                                                         const img = document.createElement('img');
                                                         img.src = e.target.result;
                                                         img.width = 80; // Set width for preview image
-                                                        img.height =100; // Set height for preview image
+                                                        img.height = 100; // Set height for preview image
                                                         img.className = 'previewImage'; // Add a class for styling
-
-                                                        // Append the preview image to the imagePreview div
-                                                        document.getElementById('imagePreview').appendChild(img);
+                                    
+                                                        // Create a button to remove the image
+                                                        const removeButton = document.createElement('button');
+                                                        removeButton.textContent = 'X'; // Cross character
+                                                        removeButton.className = 'removeButton'; // Add a class for styling
+                                                        removeButton.onclick = function () {
+                                                            removeImage(index);
+                                                        };
+                                    
+                                                        // Append the preview image and remove button to the container
+                                                        imageContainer.appendChild(img);
+                                                        imageContainer.appendChild(removeButton);
+                                    
+                                                        // Append the container to the imagePreview div
+                                                        imagePreview.appendChild(imageContainer);
                                                     };
-
+                                    
                                                     // Read the image file as a data URL
                                                     reader.readAsDataURL(file);
                                                 }
-                                            }
+                                            });
                                         }
-
+                                    
+                                        function removeImage(index) {
+                                            selectedFiles.splice(index, 1);
+                                            updateFileInput();
+                                            handleFileInputChange({ target: { files: new FileListItems(selectedFiles) } });
+                                        }
+                                    
+                                        function updateFileInput() {
+                                            const dataTransfer = new DataTransfer();
+                                            selectedFiles.forEach(file => dataTransfer.items.add(file));
+                                            document.getElementById('productImages').files = dataTransfer.files;
+                                        }
+                                    
+                                        // Custom FileList object creation
+                                        function FileListItems(files) {
+                                            const b = new ClipboardEvent('').clipboardData || new DataTransfer();
+                                            for (let i = 0, len = files.length; i < len; i++) b.items.add(files[i]);
+                                            return b.files;
+                                        }
+                                    
                                         // Attach event listener to file input
                                         document.getElementById('productImages').addEventListener('change', handleFileInputChange);
-
                                     </script>
+                                    
+                                    <style>
+                                        .form-container {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 15px;
+                                            max-width: 600px;
+                                            margin: auto;
+                                            padding: 20px;
+                                            border: 1px solid #ccc;
+                                            border-radius: 10px;
+                                            background-color: #f9f9f9;
+                                        }
+                                    
+                                        .form-group {
+                                            display: flex;
+                                            flex-direction: column;
+                                        }
+                                    
+                                        .form-group label {
+                                            margin-bottom: 5px;
+                                        }
+                                    
+                                        .form-group input,
+                                        .form-group select,
+                                        .form-group textarea {
+                                            padding: 8px;
+                                            border: 1px solid #ccc;
+                                            border-radius: 5px;
+                                        }
+                                    
+                                        .image-preview {
+                                            display: flex;
+                                            flex-wrap: wrap;
+                                            gap: 10px;
+                                        }
+                                    
+                                        .imageContainer {
+                                            position: relative;
+                                        }
+                                    
+                                        .previewImage {
+                                            display: block;
+                                            margin-bottom: 5px;
+                                        }
+                                    
+                                        .removeButton {
+                                            position: absolute;
+                                            top: 0;
+                                            right: 0;
+                                            background: #ff0000;
+                                            color: white;
+                                            border: none;
+                                            border-radius: 0;
+                                            cursor: pointer;
+                                            padding: 2px 5px;
+                                        }
+                                    
+                                        .submit-button {
+                                            padding: 10px 15px;
+                                            border: none;
+                                            border-radius: 5px;
+                                            background-color: #28a745;
+                                            color: white;
+                                            cursor: pointer;
+                                            font-size: 16px;
+                                            align-self: flex-start;
+                                        }
+                                    
+                                        .submit-button:hover {
+                                            background-color: #218838;
+                                        }
+                                    </style>
+                                    
+                                    
+                                    
 
 
 

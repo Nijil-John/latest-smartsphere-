@@ -67,6 +67,13 @@ adminRoute.get('/order',adminController.orderLoad)
 const couponController = require('../controller/couponController')
 adminRoute.get('/coupon',couponController.loadCoupon)
 
+// Banner management
+const bannerController = require('../controller/bannarController')
+adminRoute.get('/banner',bannerController.loadBanners)
+
+
+
+
 
 
 module.exports=adminRoute

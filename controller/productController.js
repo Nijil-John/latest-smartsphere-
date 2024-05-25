@@ -1,6 +1,7 @@
 const product = require('../models/productModel')
 const category= require('../models/categoryModel')
 const catcontroller =require('./categoryController')
+const sharp = require('sharp')
 
 /* products Settings */
 const loadProduct = async (req, res) => {
@@ -44,10 +45,10 @@ const loadProduct = async (req, res) => {
         const totalProducts = await product.countDocuments();
 
         // If skip is greater than or equal to total product count, return 404
-        if (skip >= totalProducts) {
+        /* if (skip >= totalProducts) {
             return res.status(404).send('Page not found');
         }
-
+ */
         // Render the product details with category name and pagination data
         res.render('adminProduct', {
             product: productsWithCategory,
@@ -58,19 +59,12 @@ const loadProduct = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: error.message });
+        //res.status(500).json({ message: error.message })
     }
 };
 
 // product image check
-const imageCheck = async (req, res) => {
-    try {
-       
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Internal Server Error'); // Send an error response if there's an issue
-    }
-};
+
 
 //edit product 
 const editProduct = async(req,res)=>{
@@ -156,6 +150,17 @@ const AddProducts= async(req,res)=>{
         console.log(error.message +" here addproduct")
     }
 }
+
+const cropImage = async(req,res)=>{
+    try {
+        await sharp('image').extract({width:500,height:330,left:120,top:70}).toFile('image')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 
 module.exports={
     loadProduct,

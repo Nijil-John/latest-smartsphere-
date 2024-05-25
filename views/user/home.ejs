@@ -83,11 +83,20 @@
 						<div class="col-md-6">
 							<div class="header-search">
 								<form>
-									<select class="input-select">
+									<select id="productCategory" name="productCategory" class="input-select">
 										<option value="0">All Categories</option>
-										<option value="1">Smart Phones</option>
-										<option value="1">Camera</option>
+										<% if (Array.isArray(categories)) { %>
+											<% categories.forEach(category => { %>
+												<option value="<%= category._id %>">
+													<%= category.categoryName %>
+												</option>
+											<% }); %>
+										<% } else { %>
+											<option value="0">No categories available</option>
+										<% } %>
 									</select>
+									
+									
 									<input class="input" placeholder="Search here">
 									<button class="search-btn">Search</button>
 								</form>
@@ -102,7 +111,7 @@
 								<div>
 									<a href="#">
 										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
+										<span>Wishlist</span>
 										<div class="qty">0</div>
 									</a>
 								</div>
@@ -112,36 +121,14 @@
 								<div class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
-										<span>Your Cart</span>
+										<span>Cart</span>
 										<div class="qty">0</div>
 									</a>
 									<div class="cart-dropdown">
-										<div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product01.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>₹980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product02.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>₹980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-										</div>
-										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: 2940.00</h5>
+										
+										<div class="cart-summary"><!-- cart summary -->
+											<small></small>
+											<h5></h5>
 										</div>
 										<div class="cart-btns">
 											<a href="#">View Cart</a>
@@ -181,11 +168,15 @@
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="#">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						
+							<% if (Array.isArray(categories)) { %>
+								<% categories.forEach(category => { %>
+									<li><a href="#"><%= category.categoryName %></a></li>
+								<% }); %>
+							<% } else { %>
+								
+							<% } %>
+						
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -222,7 +213,7 @@
 								<img src="./img/shop03.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Accessories<br>Collection</h3>
+								<h3>Phones<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -291,9 +282,9 @@
 											<div class="product-body">
 												<p class="product-category">Category</p>
 												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price">₹980.00 <del class="product-old-price">₹990.00</del></h4>
+												<h4 class="product-price">₹1980.00 <del class="product-old-price">₹990.00</del></h4>
 												<div class="product-rating">
-													<i class="fa fa-star"></i>
+													
 													<i class="fa fa-star"></i>
 													<i class="fa fa-star"></i>
 													<i class="fa fa-star"></i>
@@ -322,7 +313,7 @@
 											<div class="product-body">
 												<p class="product-category">Category</p>
 												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price">₹980.00 <del class="product-old-price">₹990.00</del></h4>
+												<h4 class="product-price">₹2980.00 <del class="product-old-price">₹990.00</del></h4>
 												<div class="product-rating">
 													<i class="fa fa-star"></i>
 													<i class="fa fa-star"></i>
@@ -353,7 +344,7 @@
 											<div class="product-body">
 												<p class="product-category">Category</p>
 												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price">₹980.00 <del class="product-old-price">₹990.00</del></h4>
+												<h4 class="product-price">₹3980.00 <del class="product-old-price">₹990.00</del></h4>
 												<div class="product-rating">
 												</div>
 												<div class="product-btns">
@@ -376,7 +367,7 @@
 											<div class="product-body">
 												<p class="product-category">Category</p>
 												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price">₹980.00 <del class="product-old-price">₹990.00</del></h4>
+												<h4 class="product-price">₹4980.00 <del class="product-old-price">₹990.00</del></h4>
 												<div class="product-rating">
 													<i class="fa fa-star"></i>
 													<i class="fa fa-star"></i>

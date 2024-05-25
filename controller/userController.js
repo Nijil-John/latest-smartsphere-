@@ -4,6 +4,7 @@ const bcrypt= require('bcrypt')
 const nodemailer= require('nodemailer')
 const address= require('../models/adressModel')
 //const { render } = require('../routes/userRoute')
+const category = require('../models/categoryModel')
 require('dotenv').config();
 
 
@@ -11,12 +12,14 @@ require('dotenv').config();
 
 const loadhome=async (req,res)=>{
     try {
+      const catData = await category.find({})
+      console.log(catData);
         if (req.session.user_id) {
           const userData = await User.findOne({_id:req.session.user_id})
-          res.render('home',{users:userData})
+          res.render('home',{users:userData,categories:catData})
           
         } else {
-          res.render('home')
+          res.render('home',{categories:catData})
         }
        
     } catch (error) {
@@ -198,6 +201,7 @@ const resendOtp = async(req,res)=>{
 
 const verifyUserLogin = async (req, res) => {
   try {
+    const catData = await category.find({})
     const email = req.body.email;
     const password = req.body.password;
     const loginUserData =await User.findOne({email:email})
@@ -211,7 +215,7 @@ const verifyUserLogin = async (req, res) => {
           res.render("otpVerify", { message: "please verify with OTP" });
         } else {
           req.session.user_id = loginUserData._id;
-          res.render("home",{users:loginUserData});
+          res.render("home",{users:loginUserData,categories:catData});
         }
       } else {
         res.render("userLogin", { message: "login credentials are incorrect" });
