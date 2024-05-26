@@ -5,6 +5,7 @@ const nodemailer= require('nodemailer')
 const address= require('../models/adressModel')
 //const { render } = require('../routes/userRoute')
 const category = require('../models/categoryModel')
+const product = require('../models/productModel')
 require('dotenv').config();
 
 
@@ -13,13 +14,14 @@ require('dotenv').config();
 const loadhome=async (req,res)=>{
     try {
       const catData = await category.find({})
-      console.log(catData);
+      const productData = await product.find({})
+      console.log(productData);
         if (req.session.user_id) {
           const userData = await User.findOne({_id:req.session.user_id})
           res.render('home',{users:userData,categories:catData})
           
         } else {
-          res.render('home',{categories:catData})
+          res.render('home',{categories:catData,product:productData})
         }
        
     } catch (error) {

@@ -63,9 +63,6 @@ const loadProduct = async (req, res) => {
     }
 };
 
-// product image check
-
-
 //edit product 
 const editProduct = async(req,res)=>{
     try {
