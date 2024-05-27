@@ -6,7 +6,7 @@ Database.connectDb() //database connections
 const errorHandler = require('./middleware/errorHandler');
 const port = process.env.PORT 
 app.use('/admin/productAssets', express.static('productAssets'));
-app.use('//productAssets', express.static('userAssets'));
+app.use('/productAssets', express.static('productAssets'));
 
 
 app.use(express.urlencoded({ extended: true }));
