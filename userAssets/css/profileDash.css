@@ -1,7 +1,7 @@
 .sidenav {
      display: inline-flex;    
     height: auto;
-    width: 250px;
+    width: 285px;
     position: relative;
     z-index: 0;
     top: 0px;
@@ -80,10 +80,10 @@
   }
   .check {
     display: inline-flex;
-    align-items: center;
     width: 100%;
     flex-wrap: wrap;
-  }
+    flex-direction: row;
+    justify-content: flex-start;}
   /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
@@ -98,3 +98,59 @@
   .edit-data:hover{
     color: hsl(0, 0%, 100%);
   }
+
+  .mainforgot {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    margin-left: 450px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+.mainform {
+  margin-top: 1%;
+  margin-bottom: 2%;
+  border-style: solid;
+  border-color: #e7e7e7;
+  margin-left: 20%;
+  border-width: 5px;
+  padding: 25px;
+  border-radius: 30px;
+}

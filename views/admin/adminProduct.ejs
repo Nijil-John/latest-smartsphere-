@@ -46,14 +46,6 @@
                             <span class="hide-menu">Admin Tools</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-article"></i>
-                                </span>
-                                <span class="hide-menu">Customer</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/products" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -61,6 +53,15 @@
                                 <span class="hide-menu">Products</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-user"></i>
+                                </span>
+                                <span class="hide-menu">Customer</span>
+                            </a>
+                        </li>
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/order" aria-expanded="false">
                                 <span>
@@ -78,33 +79,30 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Coupon Management</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-typography"></i>
                                 </span>
                                 <span class="hide-menu">Sales Report</span>
                             </a>
                         </li>
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
-                                <span class="hide-menu">Banner Management</span>
+                                <span class="hide-menu">Offer Module</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-user-plus"></i>
-                                </span>
-                                <span class="hide-menu">Coupon Management</span>
-                            </a>
-                        </li>
-
                     </ul>
-
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -127,7 +125,7 @@
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <p>
-                            <%= admin.name %>
+                            <!-- <%= admin.name %> -->
                         </p>
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
@@ -143,7 +141,9 @@
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3"><%= admin.name %></p>
+                                            <p class="mb-0 fs-3">
+                                                <%= admin.name %>
+                                            </p>
                                         </a>
                                         <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
@@ -174,17 +174,20 @@
                                         <h5 class="card-title fw-semibold">Product list</h5>
                                     </div>
                                     <div>
-                                        <a href="/admin/addproduct"> add products</a>
+
+                                        <button style="background-color:#5D87FF;border-color: #606060;"><a
+                                                href="/admin/addproduct" style="color: white;"> Add Products
+                                            </a></button>
                                     </div>
                                     <div>
-                                        <form action="">
+                                        <!-- <form action="">
                                             <input type="text" placeholder="search by user name,email,mobile..."
                                                 name="search" />
                                             <input type="submit" value="search" />
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
-                                <div >
+                                <div>
 
                                     <table width="60%" id="adminDashboardTable">
                                         <tr class="admindashboardTableRow">
@@ -196,9 +199,9 @@
                                             <th> Images </th>
                                             <th> Block </th>
                                             <th> Actions</th>
-                        
+
                                         </tr>
-                        
+
                                         <% if(product.length>0){
                                             for(let i=0; i <product.length;i++){ %>
                                                 <tr class="admindashboardTableRow">
@@ -208,37 +211,47 @@
                                                     <td>
                                                         <%= product[i].name %>
                                                     </td>
-                                                    <td>    
+                                                    <td>
                                                         <%= product[i].categoryName %>
-                                                        
+
                                                     </td>
                                                     <td>
-                                                        <%= product[i].price %>
+                                                        <%= product[i].originalPrice %>
                                                     </td>
                                                     <td>
                                                         <%= product[i].quantity %>
-                                                    </td>                                                
-                                                        <td>
-                                                            <div class="image-container">
-                                                              <% for(let j = 0; j < product[i].productImage.length; j++) { %>
-                                                                <% // Replace backslashes with forward slashes in image path %>
-                                                                <% let imagePath = product[i].productImage[j].replace(/\\/g, '/'); %>
-                                                                <img src="<%= imagePath %>" alt="Product Image">
-                                                              <% } %>
-                                                            </div>
-                                                          </td>
-                                                    
+                                                    </td>
+                                                    <td>
+                                                        <div class="image-container">
+                                                            <% if (product[i].productImage.length> 0) { %>
+                                                                <% for(let j=0; j < product[i].productImage.length; j++)
+                                                                    { %>
+                                                                    <% let imagePath=product[i].productImage[j].path; %>
+                                                                        <img src="<%= imagePath %>" alt="Product Image">
+                                                                        <% } %>
+                                                                            <% } else { %>
+                                                                                <img src="default-image-path.jpg"
+                                                                                    alt="Default Image">
+                                                                                <!-- Add a default image if needed -->
+                                                                                <% } %>
+                                                        </div>
+                                                    </td>
+
+
                                                     <td onclick="refreshHeader('<%= product[i].productId %>')">
                                                         <a href="products/<%= product[i].productId %>">
                                                             <i class="fa fa-user-o"></i>
-                                                            <span id="blockedValue_<%= product[i].productId %>"><%= product[i].isDelete %></span>
+                                                            <span id="blockedValue_<%= product[i].productId %>">
+                                                                <%= product[i].isDelete %>
+                                                            </span>
                                                         </a>
-                                                        
+
                                                     </td>
                                                     <td>
-                                                        <a href="/admin/editproduct?_id=<%= product[i].productId %>">edit</a>
+                                                        <a
+                                                            href="/admin/editproduct?_id=<%= product[i].productId %>">edit</a>
                                                     </td>
-                                                    
+
                                                     <script>
                                                         function refreshHeader(id) {
                                                             var blockedSpan = document.getElementById("blockedValue_" + id);
@@ -247,26 +260,27 @@
                                                             // Update the span content
                                                             blockedSpan.innerText = currentValue === "true" ? "false" : "true";
                                                         }
-                                                    </script> 
-                        
+                                                    </script>
+
                                                 </tr>
                                                 <% } }else{ %>
                                                     <tr class="admindashboardTableRow">
                                                         <td colspan="5">product Not found</td>
                                                     </tr>
-                        
+
                                                     <% } %>
 
-                                                    
+
                                     </table>
 
 
                                     <div class="pagination">
-                                        <% for(let i = 1; i <= totalPages; i++) { %>
-                                            <a href="/admin/product?page=<%= i %>&limit=<%= limit %>" class="<%= page === i ? 'active' : '' %>">
+                                        <% for(let i=1; i <=totalPages; i++) { %>
+                                            <a href="/admin/products?page=<%= i %>&limit=<%= limit %>"
+                                                class="<%= page === i ? 'active' : '' %>">
                                                 <%= i %>
                                             </a>
-                                        <% } %>
+                                            <% } %>
                                     </div>
 
 
@@ -307,7 +321,7 @@
 
                 <div class="py-6 px-6 text-center">
                     <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
-                        class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+                            class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
                 </div>
 
             </div>

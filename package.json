@@ -1,7 +1,6 @@
 {
   "name": "latest-smart_sphere",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,16 +11,25 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "chart.js": "^4.4.7",
+    "cookie-session": "^2.1.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mongoose": "^8.3.2",
     "multer": "^1.4.5-lts.1",
     "nocache": "^4.0.0",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0",
+    "pdfkit": "^0.15.1",
+    "razorpay": "^2.9.5",
     "sharp": "^0.33.4",
     "short-unique-id": "^5.2.0"
-  }
+  },
+  "description": ""
 }

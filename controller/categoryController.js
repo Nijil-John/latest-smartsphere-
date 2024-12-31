@@ -1,5 +1,7 @@
 const category =require('../models/categoryModel')
+const product = require('../models/productModel')
 const shortId=require('short-unique-id')
+const user = require("../models/userModel")
 
 const ShortUniqueId=async()=>{
     const id = new shortId({length:6})
@@ -164,6 +166,28 @@ const loadCategory = async (req, res) => {
          console.log(error.message +" its here");
      }
  }
+ const categoryWise = async(req,res)=>{
+    try {
+        const catId = req.params.id
+        //console.log(catId);
+        const catdata = await category.find({categoryId:catId})
+        const id = catdata[0]._id.toString()
+        //console.log(id);
+        
+        const productData = await product.find({categoryId:id})
+        //console.log(productData);
+        const catData = await category.find({})
+        
+        if (req.session.user_id) {
+            const userData= await user.findById({_id:req.session.user_id})
+            res.render('categoryWise',{categories:catData,product:productData,users:userData })
+        } else {
+            res.render('categoryWise',{categories:catData,product:productData})
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+ }
  
  
 
@@ -181,6 +205,7 @@ module.exports={
     updateCategory,
     categoryAction,
     loadAddCategory,
+    categoryWise,
 
     ShortUniqueId
 

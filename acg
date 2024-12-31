@@ -1,0 +1,43 @@
+<div class="row">
+          <div class="col-lg-4 d-flex align-items-stretch">
+            <div class="card w-100">
+              <div class="card-body p-4">
+                <div class="mb-4">
+                  <h3>Best selling product</h3>
+                </div>
+                <div class="product-grid">
+                  <% topProduct.forEach((product) => { %>
+                    <div class="product-item">
+                      <img src="<%= product.productImage[0].path %>" alt="" class="stamp-image">
+                      <h4><%= product.name %></h4>
+                      <p>numberof sales : <%= product.salesCount %></p>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+              <style>
+                .product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Creates 5 equal columns */
+  gap: 20px; /* Adds space between grid items */
+  justify-items: center; /* Centers items horizontally */
+}
+
+.product-item {
+  text-align: center; /* Centers the text */
+}
+
+.stamp-image {
+  width: 120px; /* Adjust the size to make the image look like a stamp */
+  height: auto;
+  border: 3px solid #000; /* Black border for the stamp look */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Adds shadow */
+}
+
+.product-item h4 {
+  margin-top: 10px; /* Adds space between image and name */
+  font-size: 1rem; /* Adjust the text size */
+}
+
+              </style>

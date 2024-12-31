@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modernize Free</title>
+  <link rel="shortcut icon" type="image/png" href="images/logos/favicon.png" />
+  <link rel="stylesheet" href="css/styles.min.css" />
+</head>
+
+<style>
+  form {
+    width: 60%;
+    display: grid;
+    gap: 1rem;
+    margin: auto;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  input,
+  select,
+  button {
+    padding: 0.2rem;
+    font-size: .8rem;
+  }
+
+  button {
+    background-color: #4b6cc5;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.9em;
+  }
+</style>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="./index.html" class="text-nowrap logo-img">
+            <img src="images/logos/dark-logo.png" width="180" alt="" />
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Home</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/adminDashboard" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Admin Tools</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/products" aria-expanded="false">
+                <span>
+                  <i class="ti ti-alert-circle"></i>
+                </span>
+                <span class="hide-menu">Products</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user"></i>
+                </span>
+                <span class="hide-menu">Customer</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/order" aria-expanded="false">
+                <span>
+                  <i class="ti ti-cards"></i>
+                </span>
+                <span class="hide-menu">Order</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/category" aria-expanded="false">
+                <span>
+                  <i class="ti ti-file-description"></i>
+                </span>
+                <span class="hide-menu">Catogeries</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Coupon Management</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Sales Report</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
+                <span>
+                  <i class="ti ti-login"></i>
+                </span>
+                <span class="hide-menu">Offer Module</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2"></i>
+              </a>
+            </li>
+
+          </ul>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                  <div class="message-body">
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-user fs-6"></i>
+                      <p class="mb-0 fs-3">
+                        <%= admin.name %>
+                      </p>
+                    </a>
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-mail fs-6"></i>
+                      <p class="mb-0 fs-3">My Account</p>
+                    </a>
+                    <!-- <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-list-check fs-6"></i>
+                      <p class="mb-0 fs-3">My Task</p>
+                    </a> -->
+                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!--  Header End -->
+      <div class="container-fluid">
+        <!--  Row 1 -->
+        <div class="row">
+          <div class="col-lg-8 d-flex align-items-strech">
+            <div class="card w-100">
+              <div class="card-body">
+                <div class="" style="width: 100%;">
+                  <div class="" style="width: 100%;">
+                    <h5 class="card-title fw-semibold">Add Coupons</h5>
+                    <form id="updateCouponForm" action="/admin/coupons" method="POST">
+                      <input type="hidden" value="<%= coupon._id %>" name="_id" />
+
+                      <!-- Coupon Code -->
+                      <label for="code">Coupon Code:</label>
+                      <input type="text" id="code" name="code" value="<%= coupon.code %>" required maxlength="255"
+                        style="text-transform:uppercase" />
+
+                      <!-- Remark -->
+                      <label for="details">Details:</label>
+                      <input type="text" id="details" value="<%= coupon.details %>" name="details" />
+
+                      <!-- Discount Type -->
+                      <label for="discountType">Discount Type:</label>
+                      <select id="discountType" name="discountType" required>
+                        <option value="<%= coupon.discountType %>">
+                          <%= coupon.discountType %>
+                        </option>
+                        <option value="percentage">Percentage</option>
+                        <option value="fixed-amount">Fixed Amount</option>
+                      </select>
+
+                      <!-- Discount Value -->
+                      <label for="discountValue">Discount Value:</label>
+                      <input type="number" value="<%= coupon.discountValue %>" id="discountValue" name="discountValue"
+                        required min="0" />
+                      <span class="error" id="discountValueError"></span>
+
+                      <!-- Minimum Purchase Amount -->
+                      <label for="minPurchaseAmount">Minimum Purchase Amount:</label>
+                      <input type="number" value="<%= coupon.minPurchaseAmount %>" id="minPurchaseAmount"
+                        name="minPurchaseAmount" min="0" />
+
+                      <!-- Maximum Discount Amount -->
+                      <label for="maxDiscountAmount">Maximum Discount Amount:</label>
+                      <input type="number" value="<%= coupon.maxDiscountAmount %>" id="maxDiscountAmount"
+                        name="maxDiscountAmount" />
+                      <span class="error" id="maxDiscountAmountError"></span>
+
+                      <!-- Start Date -->
+                      <label for="startDate">Start Date:</label>
+                      <input type="date" value="<%= coupon.startDate.toISOString().split('T')[0] %>" id="startDate"
+                        name="startDate" required />
+                      <span class="error" id="startDateError"></span>
+
+                      <!-- End Date -->
+                      <label for="endDate">End Date:</label>
+                      <input type="date" value="<%= coupon.endDate.toISOString().split('T')[0] %>" id="endDate"
+                        name="endDate" required />
+                      <span class="error" id="endDateError"></span>
+
+                      <!-- Usage Limit -->
+                      <label for="usageLimit">Usage Limit:</label>
+                      <input type="number" value="<%= coupon.usageLimit %>" id="usageLimit" name="usageLimit" min="0" />
+
+                      <label for="usedCount">Used Count:</label>
+                      <input type="number" value="<%= coupon.usedCount %>" id="usedCount" name="usedCount" min="0" />
+
+                      <!-- Status -->
+                      <label for="status">Status:</label>
+                      <select id="status" name="status">
+                        <option value="<%= coupon.status %>">
+                          <%= coupon.status %>
+                        </option>
+                        <option value="pending">Upcoming</option>
+                        <option value="active">Active</option>
+                        <option value="expired">Expired</option>
+                      </select>
+
+                      <!-- Submit Button -->
+                      <button type="submit">Update Coupon</button>
+                    </form>
+
+                    <script>
+                      document.getElementById('updateCouponForm').addEventListener('submit', function (event) {
+                        const startDate = document.getElementById('startDate').value;
+                        const endDate = document.getElementById('endDate').value;
+                        const discountType = document.getElementById('discountType').value;
+                        const discountValue = parseFloat(document.getElementById('discountValue').value);
+                        const minPurchaseAmount = parseFloat(document.getElementById('minPurchaseAmount').value) || 0;
+                        const maxDiscountAmount = parseFloat(document.getElementById('maxDiscountAmount').value);
+
+                        let isValid = true;
+
+                        // Clear previous errors
+                        document.querySelectorAll('.error').forEach(error => error.textContent = '');
+
+                        // Validate start date
+                        const today = new Date().toISOString().split('T')[0];
+                        if (startDate < today) {
+                          document.getElementById('startDateError').textContent = "Start date cannot be in the past.";
+                          isValid = false;
+                        }
+
+                        // Validate end date
+                        if (endDate <= startDate) {
+                          document.getElementById('endDateError').textContent = "End date must be after the start date.";
+                          isValid = false;
+                        }
+
+                        // Validate maximum discount amount for percentage type
+                        if (discountType === 'percentage') {
+                          // Calculate the expected maximum discount value based on the percentage and minimum purchase amount
+                          const calculatedMaxDiscount = (minPurchaseAmount * discountValue) / 100;
+                          if (maxDiscountAmount < calculatedMaxDiscount) {
+                            document.getElementById('maxDiscountAmountError').textContent = `Maximum Discount Amount must be at least ${calculatedMaxDiscount.toFixed(2)} (calculated as ${discountValue}% of minimum purchase amount).`;
+                            isValid = false;
+                          }
+                        }
+
+                        // Prevent form submission if validation fails
+                        if (!isValid) {
+                          event.preventDefault();
+                        }
+                      });
+                    </script>
+
+
+
+                  </div>
+                  <div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--         <div class="row">
+          <div class="col-lg-4 d-flex align-items-stretch">
+            <div class="card w-100">
+              <div class="card-body p-4">
+                <div class="mb-4">
+                  <h5 class="card-title fw-semibold">Recent Transactions</h5>
+                </div>
+                
+              </div>
+            </div>
+          </div>          
+        </div> -->
+
+        <div class="py-6 px-6 text-center">
+          <p class="mb-0 fs-4">@ll copyright reserveved<a href="#" target="_blank"
+              class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="libs/jquery/dist/jquery.min.js"></script>
+  <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/sidebarmenu.js"></script>
+  <script src="js/app.min.js"></script>
+  <script src="libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="libs/simplebar/dist/simplebar.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+
+</html>

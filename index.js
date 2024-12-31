@@ -2,12 +2,13 @@ require('dotenv').config();
 const express = require('express')
 const Database = require('./config/Database')
 const app = express()
+const path = require('path')
 Database.connectDb() //database connections
 const errorHandler = require('./middleware/errorHandler');
 const port = process.env.PORT 
 app.use('/admin/productAssets', express.static('productAssets'));
-app.use('/productAssets', express.static('productAssets'));
-
+app.use('/productAssets/', express.static('productAssets'));
+app.use('/userAssets', express.static(path.join(__dirname, 'userAssets')));
 
 app.use(express.urlencoded({ extended: true }));
 

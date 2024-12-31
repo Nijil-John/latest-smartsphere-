@@ -18,7 +18,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="/admin/adminDashboard" class="text-nowrap logo-img">
             <img src="images/logos/dark-logo.png" width="180" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -45,14 +45,6 @@
               <span class="hide-menu">Admin Tools</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Customer</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/products" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
@@ -60,6 +52,15 @@
                 <span class="hide-menu">Products</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user"></i>
+                </span>
+                <span class="hide-menu">Customer</span>
+              </a>
+            </li>
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/order" aria-expanded="false">
                 <span>
@@ -77,6 +78,14 @@
               </a>
             </li>
             <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Coupon Management</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
                 <span>
                   <i class="ti ti-typography"></i>
@@ -84,27 +93,15 @@
                 <span class="hide-menu">Sales Report</span>
               </a>
             </li>
-
-            
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/banner" aria-expanded="false">
+              <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
                 <span>
                   <i class="ti ti-login"></i>
                 </span>
-                <span class="hide-menu">Banner Management</span>
+                <span class="hide-menu">Offer Module</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Coupon Management</span>
-              </a>
-            </li>
-
           </ul>
-
         </nav>
         <!-- End Sidebar navigation -->
       </div>
@@ -136,7 +133,9 @@
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><%= admin.name %></p>
+                      <p class="mb-0 fs-3">
+                        <%= admin.name %>
+                      </p>
                     </a>
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-mail fs-6"></i>
@@ -164,35 +163,144 @@
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div class="mb-3 mb-sm-0">
                     <h5 class="card-title fw-semibold">Sales Overview</h5>
+                  
+                    <form action="/admin/dashboard" method="get">
+                      <label for="filter">Filter by:</label>
+                      <select name="filter" id="filter" onchange="this.form.submit()">
+                        <option value="daily" <%= filter === 'daily' ? 'selected' : '' %>>Daily</option>
+                        <option value="monthly" <%= filter === 'monthly' ? 'selected' : '' %>>Monthly</option>
+                        <option value="yearly" <%= filter === 'yearly' ? 'selected' : '' %>>Yearly</option>
+                      </select>
+                    </form>
+                  
+                    <!-- Chart for Orders by Status -->
+                    <canvas id="ordersChart" width="1000" height="500"></canvas>
+                  
+                    <!-- Include Chart.js -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                  
+                    <script>
+                      // Parse the JSON strings into actual JavaScript arrays
+                      const labels = <%- JSON.stringify(labels) %>;
+                      const orderCounts = <%- JSON.stringify(orderCounts) %>;
+                  
+                      const ctx = document.getElementById('ordersChart').getContext('2d');
+                      const ordersChart = new Chart(ctx, {
+                        type: 'bar', // You can change to 'bar' or another type if you prefer
+                        data: {
+                          labels: labels,
+                          datasets: [
+                            {
+                              label: 'Pending Orders',
+                              data: orderCounts.pending,
+                              borderColor: 'rgba(255, 99, 132, 1)',
+                              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Confirmed Orders',
+                              data: orderCounts.confirmed,
+                              borderColor: 'rgba(54, 162, 235, 1)',
+                              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Shipped Orders',
+                              data: orderCounts.shipped,
+                              borderColor: 'rgba(75, 192, 192, 1)',
+                              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Delivered Orders',
+                              data: orderCounts.delivered,
+                              borderColor: 'rgba(153, 102, 255, 1)',
+                              backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Cancelled Orders',
+                              data: orderCounts.cancelled,
+                              borderColor: 'rgba(255, 159, 64, 1)',
+                              backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Return-Requested Orders',
+                              data: orderCounts['Return-Requested'],
+                              borderColor: 'rgba(255, 159, 64, 1)',
+                              backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                              borderWidth: 2,
+                              fill: true
+                            },
+                            {
+                              label: 'Return-Approved Orders',
+                              data: orderCounts['Return-Approved'],
+                              borderColor: 'rgba(255, 159, 64, 1)',
+                              backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                              borderWidth:2,
+                              fill: true
+                            }
+                          ]
+                        },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true
+                            }
+                          }
+                        }
+                      });
+                    </script>
                   </div>
+                  
+                  
+                  
+
                   <div>
-                    <select class="form-select">
-                      
-                    </select>
                   </div>
                 </div>
-                
+
               </div>
             </div>
           </div>
         </div>
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card w-100">
               <div class="card-body p-4">
                 <div class="mb-4">
-                  <h5 class="card-title fw-semibold">Recent Transactions</h5>
+                  <h5 class="card-title fw-semibold">Best selling product</h5>
                 </div>
-                
+                <% topProduct.forEach((product)=>{%>
+                  <img src="<%= product.productImage[0].path %>" alt="" class="stamp-image"> <br>
+                  <h4><%= product.name %></h4>
+                  <p>numberof sales : <%= product.salesCount %></p>
+                <%})%>
+                <style>
+                  .stamp-image {
+  width: 150px; /* Adjust the size */
+  height: auto;
+  border: 3px solid #000; /* Black border for the stamp look */
+  border-radius: 10px; /* Rounded corners for a stamp-like effect */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Adds shadow */
+}
+
+                </style>
               </div>
             </div>
           </div>          
-        </div> -->
-        
+        </div>
+
         <div class="py-6 px-6 text-center">
           <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
               class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
-      </div>
+        </div>
       </div>
     </div>
   </div>

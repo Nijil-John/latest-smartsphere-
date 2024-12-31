@@ -1,2 +1,3 @@
-const sessionSecret ="mySiteSessionSecret"
-module.exports = { sessionSecret }
+const userSessionSecret ="mySiteUserSessionSecret"
+const adminSessionSecret="mySiteAdminSessionSecret"
+module.exports = { userSessionSecret,adminSessionSecret }

@@ -45,14 +45,6 @@
                             <span class="hide-menu">Admin Tools</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-article"></i>
-                                </span>
-                                <span class="hide-menu">Customer</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/products" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -60,6 +52,15 @@
                                 <span class="hide-menu">Products</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-user"></i>
+                                </span>
+                                <span class="hide-menu">Customer</span>
+                            </a>
+                        </li>
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/order" aria-expanded="false">
                                 <span>
@@ -77,33 +78,30 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Coupon Management</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-typography"></i>
                                 </span>
                                 <span class="hide-menu">Sales Report</span>
                             </a>
                         </li>
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
-                                <span class="hide-menu">Banner Management</span>
+                                <span class="hide-menu">Offer Module</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-user-plus"></i>
-                                </span>
-                                <span class="hide-menu">Coupon Management</span>
-                            </a>
-                        </li>
-
                     </ul>
-
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -185,32 +183,33 @@
                                         <div class="mb-4">
                                             <h5 class="card-title fw-semibold">Add Category</h5>
                                         </div>
-        
+
                                         <form action="/admin/addcategory" method="POST">
-                                           <!--  <label for="categoryName">Category Id:</label><br>
+                                            <!--  <label for="categoryName">Category Id:</label><br>
                                             <input type="text" id="categoryName" name="categoryId" required><br><br> -->
                                             <label for="categoryName">Category Name:</label><br>
                                             <input type="text" id="categoryName" name="categoryName" required><br><br>
                                             <label for="categoryName">Category Description:</label><br>
-                                            <input type="text" id="categoryName" name="categoryDescription" required><br><br>
+                                            <input type="text" id="categoryName" name="categoryDescription"
+                                                required><br><br>
                                             <button type="submit">Add Category</button>
                                         </form>
                                     </div>
 
-                                    
+
 
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
 
 
                 <div class="py-6 px-6 text-center">
                     <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
-                        class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+                            class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
                 </div>
 
             </div>

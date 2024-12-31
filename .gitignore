@@ -3,5 +3,10 @@ node_modules
 
 # Environment variables
 .env
-# package-lock 
 package-lock.json
+
+productAssets
+cutted
+.gitignore
+package.json
+exess

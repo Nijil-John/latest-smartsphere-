@@ -1,0 +1,53 @@
+.containerCart {
+    width: 100%;
+    height: auto; /* Changed from a fixed height to auto for better responsiveness */
+    display: flex;
+}
+
+.cart-items{
+    flex: 1;
+  /*   border: 2px solid; */
+    padding: 0 100px 0 110px;
+    /* position: relative; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    float: left;
+    width: 70%;
+}
+
+.calculationsCart {
+    flex: 1;
+    border: 2px solid #dbd7d7;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 20px; /* Increased padding for better spacing */
+    position: relative;
+    display: flex; /* Changed to flex for better alignment of child elements */
+    flex-direction: column; /* Ensures vertical stacking of items */
+}
+
+/* .cart-items h2, .calculationsCart h2 {
+    margin: 0 0 20px;
+    text-align: center;
+}
+ */
+.checkout-btn {
+    position: relative;
+    margin-top: auto; 
+    padding: 10px 10px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    /* cursor: pointer; */
+    font-size: 18px;
+}
+
+.checkout-btn:hover {
+    background-color: rgb(167, 87, 87);
+}
+
+.inpu-number input{
+    height: 30px;
+    width: 5%;
+}

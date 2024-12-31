@@ -45,14 +45,6 @@
                             <span class="hide-menu">Admin Tools</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-article"></i>
-                                </span>
-                                <span class="hide-menu">Customer</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/products" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -60,6 +52,15 @@
                                 <span class="hide-menu">Products</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-user"></i>
+                                </span>
+                                <span class="hide-menu">Customer</span>
+                            </a>
+                        </li>
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/order" aria-expanded="false">
                                 <span>
@@ -77,33 +78,30 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Coupon Management</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-typography"></i>
                                 </span>
                                 <span class="hide-menu">Sales Report</span>
                             </a>
                         </li>
-
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                            <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-login"></i>
                                 </span>
-                                <span class="hide-menu">Banner Management</span>
+                                <span class="hide-menu">Offer Module</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-user-plus"></i>
-                                </span>
-                                <span class="hide-menu">Coupon Management</span>
-                            </a>
-                        </li>
-
                     </ul>
-
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -183,82 +181,85 @@
                                 <div>
 
 
-                                    <form action="/admin/addproduct" method="POST" enctype="multipart/form-data" class="form-container">
+                                    <form action="/admin/addproduct" method="POST" enctype="multipart/form-data"
+                                        class="form-container">
                                         <!-- <label for="productId">Product Id:</label>
                                         <input type="text" id="productId" name="productId" required><br><br> -->
-                                    
+
                                         <div class="form-group">
                                             <label for="productName">Product Name:</label>
                                             <input type="text" id="productName" name="productName" required>
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="productPrice">Product Price:</label>
                                             <input type="text" id="productPrice" name="productPrice" required>
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="productQuantity">Product Quantity:</label>
                                             <input type="text" id="productQuantity" name="productQuantity" required>
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="productCategory">Product Category:</label>
                                             <select id="productCategory" name="productCategory">
                                                 <option>Please select</option>
-                                                <% categories.forEach(category => { %>
+                                                <% categories.forEach(category=> { %>
                                                     <option value="<%= category._id %>">
                                                         <%= category.categoryName %>
                                                     </option>
-                                                <% }); %>
+                                                    <% }); %>
                                             </select>
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="productImages">Product Images:</label>
-                                            <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+                                            <input type="file" id="productImages" name="productImages" accept="image/*"
+                                                multiple>
                                             <div id="imagePreview" class="image-preview"></div>
                                         </div>
-                                    
+
                                         <div class="form-group">
                                             <label for="productDescription">Product Description:</label>
-                                            <textarea id="productDescription" name="productDescription" rows="4" cols="50" required></textarea>
+                                            <textarea id="productDescription" name="productDescription" rows="4"
+                                                cols="50" required></textarea>
                                         </div>
-                                    
+
                                         <button class="submit-button bg-success" type="submit">Add Product</button>
                                     </form>
-                                    
+
                                     <script>
                                         let selectedFiles = [];
-                                    
+
                                         // Function to handle file input change event
                                         function handleFileInputChange(event) {
                                             const files = event.target.files;
                                             selectedFiles = Array.from(files);
                                             const imagePreview = document.getElementById('imagePreview');
-                                    
+
                                             // Clear previous previews
                                             imagePreview.innerHTML = '';
-                                    
+
                                             // Loop through selected files
                                             selectedFiles.forEach((file, index) => {
                                                 if (file.type.match('image.*')) {
                                                     const reader = new FileReader();
-                                    
+
                                                     // Read the image file
                                                     reader.onload = function (e) {
                                                         // Create a div to hold the image and remove button
                                                         const imageContainer = document.createElement('div');
                                                         imageContainer.className = 'imageContainer';
                                                         imageContainer.dataset.index = index;
-                                    
+
                                                         // Create an <img> element for preview
                                                         const img = document.createElement('img');
                                                         img.src = e.target.result;
                                                         img.width = 80; // Set width for preview image
                                                         img.height = 100; // Set height for preview image
                                                         img.className = 'previewImage'; // Add a class for styling
-                                    
+
                                                         // Create a button to remove the image
                                                         const removeButton = document.createElement('button');
                                                         removeButton.textContent = 'X'; // Cross character
@@ -266,44 +267,44 @@
                                                         removeButton.onclick = function () {
                                                             removeImage(index);
                                                         };
-                                    
+
                                                         // Append the preview image and remove button to the container
                                                         imageContainer.appendChild(img);
                                                         imageContainer.appendChild(removeButton);
-                                    
+
                                                         // Append the container to the imagePreview div
                                                         imagePreview.appendChild(imageContainer);
                                                     };
-                                    
+
                                                     // Read the image file as a data URL
                                                     reader.readAsDataURL(file);
                                                 }
                                             });
                                         }
-                                    
+
                                         function removeImage(index) {
                                             selectedFiles.splice(index, 1);
                                             updateFileInput();
                                             handleFileInputChange({ target: { files: new FileListItems(selectedFiles) } });
                                         }
-                                    
+
                                         function updateFileInput() {
                                             const dataTransfer = new DataTransfer();
                                             selectedFiles.forEach(file => dataTransfer.items.add(file));
                                             document.getElementById('productImages').files = dataTransfer.files;
                                         }
-                                    
+
                                         // Custom FileList object creation
                                         function FileListItems(files) {
                                             const b = new ClipboardEvent('').clipboardData || new DataTransfer();
                                             for (let i = 0, len = files.length; i < len; i++) b.items.add(files[i]);
                                             return b.files;
                                         }
-                                    
+
                                         // Attach event listener to file input
                                         document.getElementById('productImages').addEventListener('change', handleFileInputChange);
                                     </script>
-                                    
+
                                     <style>
                                         .form-container {
                                             display: flex;
@@ -316,16 +317,16 @@
                                             border-radius: 10px;
                                             background-color: #f9f9f9;
                                         }
-                                    
+
                                         .form-group {
                                             display: flex;
                                             flex-direction: column;
                                         }
-                                    
+
                                         .form-group label {
                                             margin-bottom: 5px;
                                         }
-                                    
+
                                         .form-group input,
                                         .form-group select,
                                         .form-group textarea {
@@ -333,22 +334,22 @@
                                             border: 1px solid #ccc;
                                             border-radius: 5px;
                                         }
-                                    
+
                                         .image-preview {
                                             display: flex;
                                             flex-wrap: wrap;
                                             gap: 10px;
                                         }
-                                    
+
                                         .imageContainer {
                                             position: relative;
                                         }
-                                    
+
                                         .previewImage {
                                             display: block;
                                             margin-bottom: 5px;
                                         }
-                                    
+
                                         .removeButton {
                                             position: absolute;
                                             top: 0;
@@ -360,7 +361,7 @@
                                             cursor: pointer;
                                             padding: 2px 5px;
                                         }
-                                    
+
                                         .submit-button {
                                             padding: 10px 15px;
                                             border: none;
@@ -371,14 +372,14 @@
                                             font-size: 16px;
                                             align-self: flex-start;
                                         }
-                                    
+
                                         .submit-button:hover {
                                             background-color: #218838;
                                         }
                                     </style>
-                                    
-                                    
-                                    
+
+
+
 
 
 
@@ -391,14 +392,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
 
 
                 <div class="py-6 px-6 text-center">
                     <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
-                        class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
+                            class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
                 </div>
 
             </div>

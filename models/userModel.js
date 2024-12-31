@@ -10,17 +10,19 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   mobile: {
-    type: String,
-    required: true,
+    type: String
   },
   password: {
-    type: String,
-    required: true,
+    type: String
   },
   isVerified: {
     type: Boolean,
     default: 1,
   },
+  googleId: {
+    type: String    
+  }
+  ,
   isAdmin: {
     type: Boolean,
     default: 1,

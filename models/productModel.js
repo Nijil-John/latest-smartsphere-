@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema({
         type:String,
         required : true
     },
-    price:{
+    price:{// the selling price of the product 
         type:Number,
         required : true
     },
@@ -22,9 +22,15 @@ const productSchema = mongoose.Schema({
         required : true
     },
     productImage:[{
-        type: String, // Assuming you store image URLs
-        required: true
-      }]
+        name:{
+            type:String,
+            required:true
+        },
+        path:{
+            type:String,
+            required:true
+        }
+    }]
     ,
     quantity:{
         type:Number,
@@ -34,6 +40,13 @@ const productSchema = mongoose.Schema({
         type:Boolean,
         default:false,
         required:true
+    },
+    originalPrice:{ //the origianal price of the product which dose not change
+        type:Number,
+        required:true
+    },
+    salesCount:{
+        type:Number
     }
 
 })

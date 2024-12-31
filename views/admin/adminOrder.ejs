@@ -45,14 +45,6 @@
               <span class="hide-menu">Admin Tools</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Customer</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/products" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
@@ -60,6 +52,15 @@
                 <span class="hide-menu">Products</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/customer" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user"></i>
+                </span>
+                <span class="hide-menu">Customer</span>
+              </a>
+            </li>
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/order" aria-expanded="false">
                 <span>
@@ -77,6 +78,14 @@
               </a>
             </li>
             <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Coupon Management</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/salesreport" aria-expanded="false">
                 <span>
                   <i class="ti ti-typography"></i>
@@ -84,26 +93,15 @@
                 <span class="hide-menu">Sales Report</span>
               </a>
             </li>
-
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/banner" aria-expanded="false">
+              <a class="sidebar-link" href="/admin/offer" aria-expanded="false">
                 <span>
                   <i class="ti ti-login"></i>
                 </span>
-                <span class="hide-menu">Banner Management</span>
+                <span class="hide-menu">Offer Module</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Coupon Management</span>
-              </a>
-            </li>
-
           </ul>
-
         </nav>
         <!-- End Sidebar navigation -->
       </div>
@@ -135,7 +133,9 @@
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3"><%= admin.name %></p>
+                      <p class="mb-0 fs-3">
+                        <%= admin.name %>
+                      </p>
                     </a>
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-mail fs-6"></i>
@@ -163,14 +163,134 @@
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div class="mb-3 mb-sm-0">
                     <h5 class="card-title fw-semibold">Orders</h5>
+                    <div>
+                      <style>
+                        /* Table styling */
+                        #adminDashboardTable {
+                          width: 110%;
+                          /* Set width to 100% */
+                          border-collapse: collapse;
+                          margin: 20px 0;
+                          /* Adjusted margin for better spacing */
+                          font-family: Arial, sans-serif;
+                        }
+
+                        /* Table header */
+                        #adminDashboardTable th {
+                          background-color: #f2f2f2;
+                          color: #000000;
+                          padding: 10px;
+                          text-align: left;
+                          font-size: 16px;
+                        }
+
+                        /* Table rows */
+                        #adminDashboardTable td {
+                          padding: 10px;
+                          border: 2px solid #000000;
+                          font-size: 14px;
+                        }
+
+                        /* Alternating row colors */
+                        #adminDashboardTable tr:nth-child(even) {
+                          background-color: #ffffff;
+                        }
+
+                        #adminDashboardTable tr:hover {
+                          background-color: #f4e1e1;
+                        }
+
+                        /* Center alignment for specific columns */
+                        #adminDashboardTable td.center {
+                          text-align: center;
+                        }
+
+                        /* Styling the 'Created At' column */
+                        #adminDashboardTable td.createdAt {
+                          color: #777;
+                          font-style: italic;
+                        }
+
+                        /* Column with multiple items (Items column) */
+                        #adminDashboardTable td.items div {
+                          margin-bottom: 5px;
+                          font-size: 13px;
+                        }
+                      </style>
+                       <% if (orders.length> 0) { %>
+                      <table id="adminDashboardTable">
+                        <tr>
+                          <th>Order ID</th>
+                          <th>User Id</th>
+
+                          <th>Total Amount</th>
+                          <th>Status</th>
+                          <th>Created At</th>
+                          <th>Items</th>
+                        </tr>
+
+                       
+                          <% for (let i = 0; i < orders.length; i++) { %>
+                            <tr>
+                              <td>
+                                <%= orders[i].orderId %>
+                              </td>
+                              <td>
+                                <%= orders[i].userId %>
+                              </td>
+                              <td class="center">
+                                <%= orders[i].totalAmount %>
+                              </td>
+                              <%if( orders[i].status==='Return-Requested' ){%>
+                                <td style="color: #ffffff;background-color: #37817e;" class="center">
+                                  <%= orders[i].status.toUpperCase() %>
+                                </td>
+                                <%} else {%>
+                                  <td style="color: red;font-size: 15px;" class="center">
+                                    <%= orders[i].status.toUpperCase() %>
+                                  </td>
+                                  <%}%>
+                                    <td class="createdAt">
+                                      <%= orders[i].createdAt.toISOString().slice(0, 10) %>
+                                    </td><!-- .toISOString().slice(0, 10) -->
+                                    <td class="items">
+                                      <a href="/admin/orderValues?orderId=<%= orders[i]._id %>">Check Details</a>
+                                      <!-- <% orders[i].items.forEach(item => { %>
+                                 
+                                  <div><strong>Product:</strong> <%= item.productName %>, <strong>Quantity:</strong> <%= item.quantity %>, <strong>Amount:</strong> <%= item.price %></div>
+                                <% }); %> -->
+                                    </td>
+                            </tr>
+                            <% } %>
+                      </table>
+                    <% }else { %>
+                     <p>Order Not Found</p>
+                        
+                      <% } %>
+
+
+                      <div class="pagination">
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                          <a href="/admin/orders?page=<%= i %>&limit=<%= limit %>"
+                            class="<%= page === i ? 'active' : '' %>">
+                            <%= i %>
+                          </a>
+                          <% } %>
+                      </div>
+                    </div>
+
+
+
+
+
+
+
                   </div>
                   <div>
-                    <select class="form-select">
-                      
-                    </select>
+
                   </div>
                 </div>
-                
+
               </div>
             </div>
           </div>
@@ -187,11 +307,11 @@
             </div>
           </div>          
         </div> -->
-        
+
         <div class="py-6 px-6 text-center">
           <p class="mb-0 fs-4">@ll copyright reserveved<a href="https://adminmart.com/" target="_blank"
               class="pe-1 text-primary text-decoration-underline">Smartsphere</a></p>
-      </div>
+        </div>
       </div>
     </div>
   </div>
