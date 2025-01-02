@@ -1,8 +1,10 @@
 const mongoose=require('mongoose')
+require("dotenv").config();
+
 
 const connectDb = async()=>{
     try {
-        mongoose.connect("mongodb+srv://nijiljohn0804:M1r5DrxqtnTEonMo@cluster1.ztd58.mongodb.net/smartsphere")
+        mongoose.connect(process.env.MONGODB)
     } catch (error) {
         console.log("error in db connection "+error.message);
     }
