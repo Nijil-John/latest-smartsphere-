@@ -215,7 +215,7 @@ const reverseOffers = async () => {
 // For example, run every day at midnight
 const implementOffer = async (req, res) => {
   try {
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("0 */6 * * * ", async () => {
       console.log("Running cron job...");
      // await cronOfferStart();
       await applyingOffer();
