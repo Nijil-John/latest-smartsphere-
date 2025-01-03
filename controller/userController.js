@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../models/userModel");
 const otpUser = require("../models/otpModel");
 const bcrypt = require("bcryptjs");
@@ -6,7 +7,6 @@ const address = require("../models/adressModel");
 //const { render } = require('../routes/userRoute')
 const category = require("../models/categoryModel");
 const product = require("../models/productModel");
-require("dotenv").config();
 const auth = require("../middleware/oAuth");
 const cart = require("../models/cartModel");
 const wishlist = require("../models/wishlistModel");
