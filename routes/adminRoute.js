@@ -38,7 +38,7 @@ adminRoute.post('/register',adminController.adminRegister)
 adminRoute.post('/',adminController.adminVerifyLogin)
 adminRoute.get('/adminDashboard',loginAuthenticator,adminController.adminDashboard)
 adminRoute.get('/dashboard',loginAuthenticator,adminController.adminDashboard)
-adminRoute.get('/logout',adminController.adminLogout)
+adminRoute.get('/logout',loginAuthenticator,adminController.adminLogout)
 adminRoute.get('/customer',loginAuthenticator,adminController.loadCustomer)
 
 //category routes
