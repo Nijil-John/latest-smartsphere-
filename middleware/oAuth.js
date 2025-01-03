@@ -2,11 +2,11 @@ const passport = require('passport')
 require('dotenv').config();
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const User=require('../models/userModel');
-const { logout } = require('../controller/userController');
+//onst { logout } = require('../controller/userController');
 passport.use(new GoogleStrategy({
     clientID:     process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback/",
+    callbackURL: "https://smart-sphere.shop/auth/google/callback/",
     passReqToCallback   : true
   },
   async (req,res, accessToken, refreshToken, profile, done) => {
