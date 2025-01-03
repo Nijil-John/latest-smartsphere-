@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const otpUser = require("../models/otpModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const address = require("../models/adressModel");
 //const { render } = require('../routes/userRoute')
