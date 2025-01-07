@@ -73,8 +73,8 @@ userRoute.post('/changepassword',userController.updatePassword )
 
 //product page load
 userRoute.get('/product/id/:id', productController.loadProductUser);
-userRoute.get("/search",loginAuthenticator,productController.searchProduct)
-userRoute.get('/searchSort',loginAuthenticator,productController.searchSort)
+userRoute.get("/search",productController.searchProduct)
+userRoute.get('/searchSort',productController.searchSort)
 
 //categoryWise
 userRoute.get('/catogery/:id',categoryController.categoryWise)

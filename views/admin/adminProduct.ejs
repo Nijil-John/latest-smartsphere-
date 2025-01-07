@@ -215,9 +215,10 @@
                                                         <%= product[i].categoryName %>
 
                                                     </td>
-                                                    <td>
+                                                    <td style="color: '<%= product[i].originalPrice > product[i].price ? 'green' : '#000000' %>';">
                                                         <%= product[i].price %>
                                                     </td>
+                                                    
                                                     <td>
                                                         <%= product[i].quantity %>
                                                     </td>

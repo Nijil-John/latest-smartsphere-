@@ -279,7 +279,7 @@
 									<% if(product.price!==product.originalPrice) {%>
 										<div class="order-col">
 											<div>Offer Discount</div>
-											<div><strong style="color: red;">- ₹ <%= product.originalPrice- product.price%></strong></div>
+											<div><strong style="color: red;">- ₹ <%=( product.originalPrice- product.price)* product.__v %></strong></div>
 										</div>
 										<%}%>
 											<% }); %>
@@ -330,7 +330,7 @@
 
 								<% let totalDiscount=0; products.forEach((product, index)=> {
 									if (product.price !== product.originalPrice) {
-									totalDiscount += (product.originalPrice - product.price);
+									totalDiscount += ((product.originalPrice - product.price)*product.__v)
 									}
 									});
 									%>

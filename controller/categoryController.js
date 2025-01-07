@@ -174,7 +174,7 @@ const loadCategory = async (req, res) => {
         const id = catdata[0]._id.toString()
         //console.log(id);
         
-        const productData = await product.find({categoryId:id})
+        const productData = await product.find({$and:[{categoryId:id},{ isDelete: { $ne: "true" } },]})
         //console.log(productData);
         const catData = await category.find({})
         

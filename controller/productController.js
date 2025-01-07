@@ -44,8 +44,10 @@ const loadProductAdmin = async (req, res) => {
           productId: 1,
           name: 1,
           description: 1,
-          originalPrice: 1,
+          price: 1,
+          originalPrice:1,
           quantity: 1,
+          brand:1,
           productImage: 1,
           categoryName: "$category.categoryName", // Extract the category name
           isDelete: 1,
@@ -100,6 +102,7 @@ const updateProduct = async (req, res) => {
   try {
     const {
       productId,
+      brandName,
       productName,
       productPrice,
       productQuantity,
@@ -111,6 +114,7 @@ const updateProduct = async (req, res) => {
     // Prepare the update data
     const updateData = {
       name: productName,
+      brand:brandName,
       price: productPrice,
       quantity: productQuantity,
       categoryId: productCategory,
@@ -214,6 +218,7 @@ const AddProducts = async (req, res) => {
     const addProduct = new product({
       productId: uniqueId,
       name: req.body.productName,
+      brand:req.body.brandName,
       description: req.body.productDescription,
       price: req.body.productPrice,
       categoryId: req.body.productCategory,
@@ -310,13 +315,14 @@ const searchProduct = async (req, res) => {
         $and: [
           { categoryId: productCategory },
           { name: { $regex: searchQuery, $options: "i" } },
+          { isDelete: { $ne: "true" } },
         ],
       });
     } else if (productCategory !== "all") {
-      products = await product.find({ categoryId: productCategory });
+      products = await product.find({$and:[{ categoryId: productCategory },{ isDelete: { $ne: "true" } },]});
     } else if (searchQuery) {
       products = await product.find({
-        name: { $regex: searchQuery, $options: "i" },
+        $and:[ {name: { $regex: searchQuery, $options: "i" }},{ isDelete: { $ne: "true" } },]
       });
     }
 
@@ -350,7 +356,7 @@ const searchSort = async (req, res) => {
 
     // Add searchtext condition
     if (searchtext) {
-      conditions.push({ name: { $regex: searchtext, $options: "i" } });
+      conditions.push({ name: { $regex: searchtext, $options: "i" } },{$and:[{ isDelete: { $ne: "true" }}] });
     }
 
     // Add productCategoryId condition
@@ -423,28 +429,28 @@ const sortProduct = async (req, res) => {
     const catData = await category.find({});
     if (req.session.Value === "1") {
       productData = await product
-        .find({})
+        .find({$and:[{ isDelete: { $ne: "true" }}] })
         .sort({ price: 1 })
         .skip(skip)
         .limit(limit); // Fetch paginated products
       message = "based on price low to high";
     } else if (req.session.Value === "2") {
       productData = await product
-        .find({})
+        .find({$and:[{ isDelete: { $ne: "true" }}] })
         .sort({ price: -1 })
         .skip(skip)
         .limit(limit); // Fetch paginated products
       message = "based on price high to low";
     } else if (req.session.Value === "3") {
       productData = await product
-        .find({})
+        .find({$and:[{ isDelete: { $ne: "true" }}] })
         .sort({ name: 1 })
         .skip(skip)
         .limit(limit); // Fetch paginated products
       message = "based on Aa to Zz";
     } else if (req.session.Value === "4") {
       productData = await product
-        .find({})
+        .find({$and:[{ isDelete: { $ne: "true" }}] })
         .sort({ name: -1 })
         .skip(skip)
         .limit(limit); // Fetch paginated products

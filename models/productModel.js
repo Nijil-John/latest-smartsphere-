@@ -47,6 +47,9 @@ const productSchema = mongoose.Schema({
     },
     salesCount:{
         type:Number
+    },
+    brand:{
+        type:String 
     }
 
 })
