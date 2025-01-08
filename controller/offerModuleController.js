@@ -226,62 +226,60 @@ const implementOffer = async (req, res) => {
   }
 };
 
-const userSideOffer= async(req,res)=>{
+const userSideOffer = async (req, res) => {
   try {
     console.log('it reached here');
-    //console.log(req.session.user_id)
-    const catData = await category.find()
-    const userData =await user.findById(req.session.user_id)
-    const offerData =await offer.find({status:"activated"})
+
+    const catData = await category.find();
+    const userData = await user.findById(req.session.user_id);
+    const offerData = await offer.find({ status: "activated" });
 
     let productData = offerData.filter((offer) => offer.offerType === 'product');
     const categoryData = offerData.filter((offer) => offer.offerType === 'category');
 
     console.log(categoryData);
+
     // Initialize dataProduct as an array
     let dataProduct = [];
 
     for (let i = 0; i < productData.length; i++) {
       let productValue = await product.find({ productId: productData[i].typeId });
-      
-      // Push a new object to the dataProduct array
-      
       dataProduct.push({
         offer: productData[i],
-        productValue:productValue       
-      })
+        productValue: productValue,
+      });
     }
 
-  /*  for(let i=0;i<dataProduct.length;i++){
-    console.log(dataProduct[i]);
-   } */
+    if (!userData) {
+      return res.render('offerPage', {
+        categories: catData,
+        offerProduct: dataProduct,
+        offerCat: categoryData,
+      });
+    }
 
+    const wishLength = await wishlist.countDocuments({ userId: req.session.user_id });
+    let cartData = await cart.find({ userId: req.session.user_id });
 
+    let cartCount = 0; // Default cart count
+    if (cartData.length > 0 && cartData[0].items) {
+      let cartItem = cartData[0].items;
+      cartCount = cartItem.length;
+    }
 
-
-
-    if(!userData){
-      res.render('offerPage',{categories: catData,offerProduct:dataProduct,offerCat:categoryData})
-      }
-   
-    const wishLength=await wishlist.countDocuments({userId:req.session.user_id})
-    let cartData = await cart.find({userId:req.session.user_id})
-    
-let cartCount = 0; // Default cart count
-
-if (cartData.length > 0 && cartData[0].items) {
-    let cartItem = cartData[0].items;
-    cartCount = cartItem.length;
-}
-    
-
-
-
-    res.render('offerPage',{wishlist:wishLength,Cart:cartCount,users:userData ,categories: catData,offerProduct: dataProduct,offerCat:categoryData})
+    return res.render('offerPage', {
+      wishlist: wishLength,
+      Cart: cartCount,
+      users: userData,
+      categories: catData,
+      offerProduct: dataProduct,
+      offerCat: categoryData,
+    });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
+
 
 
 
