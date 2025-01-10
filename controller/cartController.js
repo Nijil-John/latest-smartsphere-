@@ -74,47 +74,36 @@ const addToCart = async (req, res) => {
     console.log("Wishlist flag:", req.query.wish);
 
     const userData = await user.findById(req.session.user_id);
-    if (!userData) {
-      throw new Error("User not found.");
-    }
-
     const proId = req.query.productId;
     const quantity = parseInt(req.query.quantity) || 1;
 
     const productData = await product.findOne({ productId: proId });
     console.log("productData"+productData);
-    if (!productData) {
-      throw new Error("Product not found.");
-    }
-
+    
     const cartData = await Cart.find({ userId: userData._id });
     console.log("cartData"+cartData);
     // Handle wishlist deletion
-    if (req.query.wish === "true") {
-      const delItem = await wishlist.deleteOne({ productId: productData._id });
-      console.log("Wishlist item deleted:", delItem);
-     /*  const newItem = {
-        productId: productData._id,
-        quantity: quantity,
-        price: productData.price,
-      };
-      console.log("New product added to cart.");
-
-       let pro1=await Cart.updateOne({ _id: cartData[0]._id },{ $push: { items: newItem } }) */
-    } 
+    
      if (cartData.length > 0) {
       let items = cartData[0].items;
-      let productExist = items.some((item) =>
-        item.productId.equals(productData._id)
-      )
-
+      let quantityFromItem=0
+      let productExist = items.some((item) =>{
+      if(item.productId.equals(productData._id)){
+        quantityFromItem=item.quantity
+        return true
+      }})
+        //
+      
+     
       if (productExist) {
+        console.log(quantityFromItem);
+        if(quantityFromItem<3 && productData.quantity>quantityFromItem){
         // Increment quantity if product already exists in cart
         await Cart.updateOne(
           { _id: cartData[0]._id, "items.productId": productData._id },
           { $inc: { "items.$.quantity": quantity } }
         );
-        console.log("Quantity incremented for existing product.");
+        console.log("Quantity incremented for existing product.");}
       } else {
         // Add new product to cart
         const newItem = {
@@ -143,6 +132,11 @@ const addToCart = async (req, res) => {
       await newCart.save();
       console.log("New cart created.");
     }
+    if (req.query.wish === "true") {
+      const delItem = await wishlist.deleteOne({ productId: productData._id });
+      //console.log("Wishlist item deleted:", delItem);
+     
+    } 
 
     res.redirect("/cartdata");
   } catch (error) {
@@ -150,7 +144,7 @@ const addToCart = async (req, res) => {
     //res.status(500).send("Internal Server Error");
   }
 };
-;
+
 
 const deleteFromCart = async (req, res) => {
   try {

@@ -122,7 +122,7 @@ const adminDashboard = async (req, res) => {
     let topProduct= await product.aggregate([{ $sort: { salesCount: -1 }  // Sort in descending order based on salesCount
       }, { $limit: 10 } // Limit to top 10 products
        ])
-    console.log(topProduct);
+    //console.log(topProduct);
     // Fetch all orders (no status filter initially)
     const orders = await Order.find({}); // Fetching all orders, no status filtering
 
@@ -177,16 +177,68 @@ const adminDashboard = async (req, res) => {
       }
     }
 
+    const TpBrand=await getTopBrands()
+    console.log(TpBrand);
+    const TpCategory=await getTopCategories()
+   // console.log(TpCategory);
     // Pass the data to the EJS template
     res.render('adminDashboard', {
       admin: adminData,
       labels: labels,
       orderCounts: orderCounts,
       filter: filter,
-      topProduct:topProduct
+      topProduct:topProduct,
+      topBrands:TpBrand,
+      topCategories:TpCategory
     });
   } catch (error) {
     console.log(error.message);
+  }
+};
+
+const getTopBrands = async () => {
+  try {
+    const topBrands = await product.aggregate([
+      {
+        $group: {
+          _id: "$brand", // Group by brand
+          totalSales: { $sum: "$salesCount" }, // Sum the salesCount
+          brandImage: { $first: "$productImage.path" } // Optionally include an image from the first product
+        }
+      },
+      { $sort: { totalSales: -1 } }, // Sort by totalSales in descending order
+      { $limit: 5 } // Limit to top 10 brands
+    ]);
+    return topBrands;
+  } catch (error) {
+    console.error("Error fetching top brands:", error);
+  }
+};
+const getTopCategories = async () => {
+  try {
+    const topCategories = await product.aggregate([
+      {
+        $lookup: {
+          from: "categories", // Collection name for categories
+          localField: "categoryId",
+          foreignField: "_id", // Match with the MongoDB default _id
+          as: "categoryDetails"
+        }
+      },
+      { $unwind: "$categoryDetails" }, // Flatten the populated array
+      {
+        $group: {
+          _id: "$categoryDetails.categoryName", // Group by category name
+          totalSales: { $sum: "$salesCount" }, // Sum the salesCount
+          categoryImage: { $first: "$productImage.path" } // Optionally include an image
+        }
+      },
+      { $sort: { totalSales: -1 } }, // Sort by totalSales in descending order
+      { $limit: 5 } // Limit to top 10 categories
+    ]);
+    return topCategories;
+  } catch (error) {
+    console.error("Error fetching top categories:", error);
   }
 };
 
