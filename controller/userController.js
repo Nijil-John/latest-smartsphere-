@@ -913,6 +913,8 @@ const downloadInvoice = async (req, res) => {
 
     const generatedAt = new Date().toLocaleString();
     doc.fontSize(10).text(`Generated: ${generatedAt}`);
+    doc.fontSize(15).text('Smart-Sphere');
+    doc.fontSize(10).text('Smart-Sphere.shop');
 
     // Stream the PDF to the response
     doc.pipe(res);
@@ -954,9 +956,9 @@ const downloadInvoice = async (req, res) => {
 
     // Pricing details
     doc.fontSize(16).text('Pricing Summary:');
-    doc.fontSize(12).text(`Subtotal: (Rs) ${orderData.totalAmount + orderData.couponDiscountAmount - orderData.shippingCost - orderData.offerDiscount}`);
-    doc.text(`Coupon Discount (${couponData?.code || 'N/A'}): - (Rs) ${orderData.couponDiscountAmount}`);
-    doc.text(`Offer Discount: - (Rs) ${orderData.offerDiscount}`);
+    //doc.fontSize(12).text(`Subtotal: (Rs) ${orderData.totalAmount + orderData.couponDiscountAmount - orderData.shippingCost - orderData.offerDiscount}`);
+    doc.text(`Coupon Discount (${couponData?.code || 'N/A'}): - (Rs) ${orderData.couponDiscountAmount|| 'not applied'}`);
+    doc.text(`Offer Discount: - (Rs) ${orderData.offerDiscount|| 'not applied'}`);
     doc.text(`Shipping Cost: (Rs) ${orderData.shippingCost}`);
     doc.moveDown();
     doc.fontSize(14).text(`Total Amount: (Rs) ${orderData.totalAmount}`, { align: 'right' });
