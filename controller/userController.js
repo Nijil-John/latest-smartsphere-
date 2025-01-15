@@ -646,9 +646,29 @@ const orderDetails = async (req, res) => {
     let proData = [];
     let addressData = await address.findById(addressArray[0].shippingAddress);
     for (let i = 0; i < productArray.length; i++) {
+      // Fetch the product details using await
       proData[i] = await product.findById(productArray[i].productId);
+    
+      // Extract the quantity from productArray
+      const ql = productArray[i].quantity;
+    
+      // Log the product details before modification
+      console.log(proData[i]);
+    
+      // Check if the product data exists and add the 'orderQuantity' field
+      if (1===1) {
+        proData[i].quantity = ql; // Assign the actual quantity value
+      } else {
+        console.log(`Product with ID  not found.`);
+      }
+    
+      // Log the modified product details
+      console.log(proData);
     }
-    console.log(productArray);
+    
+
+
+    //console.log(productArray);
     res.render("orderDetails", {
       users: userData,
       products: proData,

@@ -29,6 +29,17 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      returnStatus: {
+        type: String,
+        enum: ["not-requested", "requested", "approved", "rejected"],
+        default: "not-requested",
+      },
+      returnReason: {
+        type: String,
+      },
+      returnAmount: {
+        type: Number,
+      },
     },
   ],
   couponId: {
