@@ -304,45 +304,114 @@ const deleteCoupon = async (req, res) => {
 
 
 
+/* 
 
 const incrementQuantity = async (req, res) => {
   try {
-    console.log(req.query);
-    if(req.query.qty>0){
-      let productData= await product.find({_id:req.query.productId})
-      console.log(productData);
-      if(productData[0].quantity > req.query.qty && req.query.qty < 3 ){
-        let inc = await Cart.updateOne(
-          { _id: req.query.cartId, "items.productId": req.query.productId },
-          { $inc: { "items.$.quantity": 1 } }
-        );
-      }    
-    }
+      console.log(req.query);
+      if (req.query.qty > 0) {
+          let productData = await product.find({ _id: req.query.productId });
+          if (productData[0].quantity > req.query.qty && req.query.qty < 3) {
+              await Cart.updateOne(
+                  { _id: req.query.cartId, "items.productId": req.query.productId },
+                  { $inc: { "items.$.quantity": 1 } }
+              );
+          }
+      }
 
-    res.redirect("/cartdata");
+      // Fetch updated cart details
+      const updatedCart = await Cart.findById(req.query.cartId).populate('items.productId');
+      res.json({ message: 'Quantity incremented', updatedCart });
   } catch (error) {
-    console.log(error.message);
+      console.error(error.message);
+      res.status(500).json({ error: 'An error occurred while updating quantity' });
   }
 };
-
 
 const decrementQuantity = async (req, res) => {
   try {
-    console.log(req.query);
-    if(req.query.qty>1){
-      let productData= await product.find({_id:req.query.productId})
-      if(productData[0].quantity > req.query.qty ) {
-        let inc = await Cart.updateOne(
-          { _id: req.query.cartId, "items.productId": req.query.productId },
-          { $inc: { "items.$.quantity": -1 } }
-        );
-      }    
-    }
-    res.redirect("/cartdata");
+      console.log(req.query);
+      if (req.query.qty > 1) {
+          let productData = await product.find({ _id: req.query.productId });
+          if (productData[0].quantity > req.query.qty) {
+              await Cart.updateOne(
+                  { _id: req.query.cartId, "items.productId": req.query.productId },
+                  { $inc: { "items.$.quantity": -1 } }
+              );
+          }
+      }
+
+      // Fetch updated cart details
+      const updatedCart = await Cart.findById(req.query.cartId).populate('items.productId');
+      res.json({ message: 'Quantity decremented', updatedCart });
   } catch (error) {
-    console.log(error.message);
+      console.error(error.message);
+      res.status(500).json({ error: 'An error occurred while updating quantity' });
   }
 };
+
+ */
+
+const incrementQuantity = async (req, res) => {
+  try {
+      console.log(req.query);
+      if (req.query.qty > 0) {
+          let productData = await product.find({ _id: req.query.productId });
+          if (productData[0].quantity > req.query.qty && req.query.qty < 3) {
+              await Cart.updateOne(
+                  { _id: req.query.cartId, "items.productId": req.query.productId },
+                  { $inc: { "items.$.quantity": 1 } }
+              );
+          }
+      }
+
+      // Fetch updated cart details
+      const updatedCart = await Cart.findById(req.query.cartId).populate('items.productId');
+      const updatedItem = updatedCart.items.find(item => item.productId._id.toString() === req.query.productId);
+      const updatedQuantity = updatedItem.quantity;
+      const totalPrice = (updatedItem.productId.price * updatedQuantity).toFixed(2);
+
+      res.json({ updatedQuantity, totalPrice });
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: 'An error occurred while updating quantity' });
+  }
+};
+
+const decrementQuantity = async (req, res) => {
+  try {
+      console.log(req.query);
+      if (req.query.qty > 1) {
+          let productData = await product.find({ _id: req.query.productId });
+          if (productData[0].quantity > req.query.qty) {
+              await Cart.updateOne(
+                  { _id: req.query.cartId, "items.productId": req.query.productId },
+                  { $inc: { "items.$.quantity": -1 } }
+              );
+          }
+      }
+
+      // Fetch updated cart details
+      const updatedCart = await Cart.findById(req.query.cartId).populate('items.productId');
+      const updatedItem = updatedCart.items.find(item => item.productId._id.toString() === req.query.productId);
+      const updatedQuantity = updatedItem.quantity;
+      const totalPrice = (updatedItem.productId.price * updatedQuantity).toFixed(2);
+
+      res.json({ updatedQuantity, totalPrice });
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: 'An error occurred while updating quantity' });
+  }
+};
+
+
+
+
+
+
+
+
+
 
 
 

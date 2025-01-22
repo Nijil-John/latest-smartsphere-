@@ -651,6 +651,7 @@ const orderDetails = async (req, res) => {
     
       // Extract the quantity from productArray
       const ql = productArray[i].quantity;
+      let qs=productArray[i].returnStatus;
     
       // Log the product details before modification
       console.log(proData[i]);
@@ -658,6 +659,7 @@ const orderDetails = async (req, res) => {
       // Check if the product data exists and add the 'orderQuantity' field
       if (1===1) {
         proData[i].quantity = ql; // Assign the actual quantity value
+        proData[i].brand  =qs
       } else {
         console.log(`Product with ID  not found.`);
       }
@@ -771,12 +773,20 @@ const returnReq = async (req, res) => {
     let productArray = orderData.items; // Assuming items is an
     let couponData = await coupon.findById(orderData.couponId);
     let proData = [];
-
+    console.log(productArray)
     for (let i = 0; i < productArray.length; i++) {
       proData[i] = await product.findById(productArray[i].productId); // Correct indexing
+      let ql=productArray[i].quantity;
+      let qs=productArray[i].returnStatus;
+
+      if (1===1) {
+        proData[i].quantity = ql; // Assign the actual quantity value
+        proData[i].description  =qs
+      } 
+     // console.log(proData[i]);
     }
 
-    console.log(proData);
+    //console.log(proData);
     res.render("returnReq", {
       users: userData,
       products: proData,
@@ -802,11 +812,12 @@ const confirmReturn = async (req, res) => {
       comment: comment,
     });
     const a = await returnReq.save();
-    console.log(a);
-    const updateOrder = await Order.updateOne(
-      { _id: orderId },
-      { status: status }
-    );
+    console.log(products);
+    const updateOrder = await Order.updateOne({ _id: orderId },{ status: status });
+    for( let i=0;i<products.length;i++){
+    const result = await Order.updateOne( { _id: orderId, "items.productId": products[i].productId },
+      { $set: { "items.$.returnStatus": status } }
+    );}
     console.log(updateOrder);
     res.redirect("/orders");
   } catch (error) {

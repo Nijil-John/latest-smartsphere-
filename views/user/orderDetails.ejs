@@ -225,6 +225,7 @@
                     <!-- Products Section -->
                     <div class="product-section" style="display: flex; flex-wrap: wrap; gap: 20px;">
                         <% products.forEach(product=> { %>
+                           
                             <div class="product-card"
                                 style="display: flex; background-color: #f8f8f8; padding: 20px; border-radius: 8px; width: 100%; max-width: 100%; box-sizing: border-box;">
                                 <img src="/<%= product.productImage[0].path %>" alt="<%= product.name %> Image"
@@ -239,8 +240,13 @@
                                     <p style="color: #333; font-weight: bold; font-size: 1.2em;">Price: ₹ <%=
                                             product.price %>
                                     </p>
-                                    <p style="color: #555; font-size: 1.1em;">Quantity: <%= product.quantity %>
-                                    </p>
+                                    <p style="color: #555; font-size: 1.1em;">Quantity : <%= product.quantity %>  </p>
+                                    <%if(product.brand !== 'not-requested'){%>
+                                    <p style="color: #c70000; font-size: 1em;">RETURN : <%= product.brand %>  </p>
+                                    <%if( product.brand === 'approved'){%>                                        
+                                        <p style="color: #28491f; font-size: 1em;">REFUND : DONE (check wallet) </p>
+                                        <%}%>
+                                    <%}%>
                                 </div>
                             </div>
                             <% }) %>
@@ -273,7 +279,7 @@
                                         <input type="hidden" name="user_id" id="payment_id" value="<%= order.userId %>">
                                         <input type="hidden" name="order_id" id="order_id" value="<%= order._id %>">
                                         <!-- Retry Payment Button -->
-                                        <button class="primary-btn" type="submit">Retry Payment</button>
+                                        <button style="background-color: #fa5700;font-size: medium;" type="submit">Retry Payment</button>
                                     </form>
 
                                     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -371,7 +377,7 @@
                     </div>
                      <% if (order.status==='delivered' ) { %>
                         <button
-                            style="background-color: #38803e; color: white; padding: 4px 2px; border: none; border-radius: 5px; cursor: pointer; font-size: .8em;">
+                            style="background-color: #215cc1; color: white; padding: 4px 2px; border: none; border-radius: 5px; cursor: pointer; font-size: .8em;">
                             <a href="/downloadInvoice?orderId=<%= order._id %>"
                                 style="color: white; text-decoration: none;">Download Invoice</a>
                         </button>

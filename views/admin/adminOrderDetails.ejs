@@ -212,8 +212,11 @@
                                                                 Price: ₹<%= product.price %>
                                                             </p>
                                                             <p style="color: #555; font-size: 1.1em">
-                                                                Quantity: <%= quantity[0].quantity %>
+                                                                Quantity: <%= product.quantity %>
                                                             </p>
+                                                            <%if(product.brand !== 'not-requested'){%>
+                                                                <p style="color: #c70000; font-size: 1em;">RETURN : <%= product.brand %>  </p>
+                                                                <%}%>
                                                         </div>
                                                     </div>
                                                     <% }) %>

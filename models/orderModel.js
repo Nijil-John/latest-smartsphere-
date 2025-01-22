@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
       },
       returnStatus: {
         type: String,
-        enum: ["not-requested", "requested", "approved", "rejected"],
+        enum: ["not-requested","Return-Requested","Return-Approved"],
         default: "not-requested",
       },
       returnReason: {

@@ -392,6 +392,23 @@ const orderDetail = async (req, res) => {
     let addressData = await address.findById(addressArray[0].shippingAddress);
     for (let i = 0; i < productArray.length; i++) {
       proData[i] = await product.findById(productArray[i].productId);
+      // Extract the quantity from productArray
+      const ql = productArray[i].quantity;
+      let qs=productArray[i].returnStatus;
+    
+      // Log the product details before modification
+      console.log(proData[i]);
+    
+      // Check if the product data exists and add the 'orderQuantity' field
+      if (1===1) {
+        proData[i].quantity = ql; // Assign the actual quantity value
+        proData[i].brand  =qs
+      } else {
+        console.log(`Product with ID  not found.`);
+      }
+    
+      // Log the modified product details
+      console.log(proData);
     }
     //console.log(productArray);
     //console.log(orderData);
@@ -466,12 +483,29 @@ const orderUpdate = async (req, res) => {
       let productOrder=DataOrder.items
       let productData=[]
       //console.log(`${DataOrder} here`);
-      //console.log(" its here from return");
+      console.log('checking from here')
+      console.log(productOrder);
       if (returnStatus == "approved") {
         orderUpdate = await Order.updateOne({ _id: orderId },{ status: "Return-Approved", paymentStatus: returnPaymentStatus });
+        for( let i=0;i<productOrder.length;i++){
+          if(productOrder[i].returnStatus === 'Return-Requested' ){
+          const result = await Order.updateOne( { _id: orderId, "items.productId": productOrder[i].productId },
+            { $set: { "items.$.returnStatus": returnStatus } }
+          );
+          walletUpdate = await wallet.updateOne({ userId: DataOrder.userId },{$inc: { balance: productOrder[i].price },$push:
+            {history: {amount:productOrder[i].price,type: "credit",reason: `${DataOrder._id} this order is returned as users request and product ${productOrder[i].productName}`}}});
+        }
+        }
 
-        walletUpdate = await wallet.updateOne({ userId: DataOrder.userId },{$inc: { balance: DataOrder.totalAmount },$push:
-          {history: {amount: DataOrder.totalAmount,type: "credit",reason: `${DataOrder._id} this order is returned as users request`}}});
+        for( let i=0;i<productOrder.length;i++){
+          if(productOrder[i].returnStatus === 'not-requested' ){
+            oUpdate = await Order.updateOne(
+              { _id: orderId },
+              { status: "Partial Returned", paymentStatus: "paid" }
+            );
+        }
+        }
+       
 
         returnUpdate = await proRetrun.updateOne({ orderId: orderId },{ returnStatus: returnStatus, paymentStatus: returnPaymentStatus });
         for(let i=0;i<productOrder.length;i++){

@@ -217,17 +217,84 @@
 
 												</div>
 												<div class="item-actions">
-													Qty: <a
-														href="/incrementQuantity?productId=<%= product._id %>&cartId=<%= cartItems._id %>&qty=<%= product.__v %>"><strong>+</strong></a>
-													<input style="width: 40px;text-align: center;" type="number"
-														name="quantity" value="<%= product.__v %>" min="1"
-														id="quantity-input">
-													<a
-														href="/decrementQuantity?productId=<%= product._id %>&cartId=<%= cartItems._id %>&qty=<%= product.__v %>"><strong>-</strong></a>
-													<p style="font: 22px bold;color: #ca0000;">Total Price : ₹<%=
-															(product.price * product.__v).toFixed(2) %>
-													</p>
+													Qty:
+													<button data-product-id="<%= product._id %>" data-cart-id="<%= cartItems._id %>" class="increment-btn">
+														<strong>+</strong>
+													</button>
+													<input style="width: 40px; text-align: center;" type="number" name="quantity" value="<%= product.__v %>" min="1" id="quantity-input" readonly data-cart-id="<%= cartItems._id %>">
+													<button data-product-id="<%= product._id %>" data-cart-id="<%= cartItems._id %>" class="decrement-btn">
+														<strong>-</strong>
+													</button>
+													<p style="font: 22px bold; color: #ca0000;">Total Price: ₹<%= (product.price * product.__v).toFixed(2) %></p>
 												</div>
+												
+												
+												
+
+
+												
+												<script>
+													document.addEventListener('DOMContentLoaded', () => {
+    const incrementButtons = document.querySelectorAll('.increment-btn');
+    const decrementButtons = document.querySelectorAll('.decrement-btn');
+
+    // Function to update quantity and total price
+    const updateQuantity = async (url, method = 'GET') => {
+        try {
+            const response = await fetch(url, { method });
+            if (response.ok) {
+                const updatedCart = await response.json(); // Contains updated quantity and total price
+                console.log(updatedCart); // Debugging purpose
+                const { updatedQuantity, totalPrice } = updatedCart;
+
+                // Update DOM elements
+                const qtyInput = document.querySelector(`#quantity-input[data-cart-id="${url.split('=')[1]}"]`);
+                const priceElement = qtyInput.parentElement.querySelector('p');
+
+                // Update the quantity and price
+                qtyInput.value = updatedQuantity;
+                priceElement.textContent = `Total Price: ₹${totalPrice}`;
+
+            } else {
+                console.error('Failed to update quantity');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    // Add click listeners for increment and decrement buttons
+    incrementButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const productId = btn.dataset.productId;
+            const cartId = btn.dataset.cartId;
+            const qty = btn.nextElementSibling.value;
+            const url = `/incrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}`;
+            updateQuantity(url);
+			location.reload()
+        });
+    });
+
+    decrementButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const productId = btn.dataset.productId;
+            const cartId = btn.dataset.cartId;
+            const qty = btn.previousElementSibling.value;
+            const url = `/decrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}`;
+            updateQuantity(url);
+			location.reload()
+        });
+    });
+});
+
+												</script>
+												
+												  
+
+
+											
+
+
 								</div>
 							</div>
 							<% }) %>
