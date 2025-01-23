@@ -171,13 +171,13 @@
                                     <div class="mb-3 mb-sm-0">
                                         <h5 class="card-title fw-semibold">Categories List</h5>
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <form action="">
                                             <input type="text" placeholder="search by user name,email,mobile..."
                                                 name="search" />
                                             <input type="submit" value="search" />
                                         </form>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div>
 
@@ -207,17 +207,38 @@
                                     <h5 class="card-title fw-semibold">Edit Category</h5>
                                 </div>
                                 <h1></h1>
-                                <form action="/admin/editCategory?_id=<%= category._id %>" method="POST">
-                                    <!-- <label for="categoryName" >Category Id:</label><br>
-                                    <input type="text" id="categoryName" value="<%= category.categoryId %>" name="categoryId" required><br><br> -->
-                                    <label for="categoryName">Category Name:</label><br>
-                                    <input type="text" id="categoryName" value="<%= category.categoryName %>"
-                                        name="categoryName" required><br><br>
-                                    <label for="categoryName">Category Description:</label><br>
-                                    <input type="text" id="categoryName" value="<%= category.categoryDescription %>"
-                                        name="categoryDescription" required><br><br>
-                                    <button class="bg-success" type="submit">Update Category</button>
-                                </form>
+                                <form id="categoryEditForm" action="/admin/editCategory?_id=<%= category._id %>" method="POST">
+                                    <p id="error" style="color: red;" aria-live="polite"></p>
+                                            <label for="categoryName">Category Name:</label><br>
+                                            <input class="validate-field" type="text" name="categoryName" value="<%= category.categoryName %>" required><br><br>
+                                            <label for="categoryDescription">Category Description:</label><br>
+                                            <input class="validate-field" type="text" name="categoryDescription" value="<%= category.categoryDescription %>" required><br><br>
+                                            <button class="bg-success" type="submit">Update Category</button>
+                                        </form>
+                                    
+                                        <script>
+                                            document.getElementById('categoryEditForm').addEventListener('submit', function (event) {
+                                                event.preventDefault(); // Prevent form submission
+                                    
+                                                const fields = document.querySelectorAll('.validate-field'); // Select all input fields with the class
+                                                const errorElement = document.getElementById('error');
+                                                let isValid = true;
+                                    
+                                                fields.forEach(field => {
+                                                    const value = field.value.trim();
+                                    
+                                                    if (value.length < 5 || /^\s*$/.test(value)) {
+                                                        errorElement.textContent = 'All fields must be at least 5 characters long and not just spaces.';
+                                                        isValid = false;
+                                                    }
+                                                });
+                                    
+                                                if (isValid) {
+                                                    errorElement.textContent = '';
+                                                    this.submit(); // Proceed with form submission
+                                                }
+                                            });
+                                        </script>
                             </div>
                         </div>
                     </div>
