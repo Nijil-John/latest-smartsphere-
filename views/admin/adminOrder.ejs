@@ -162,7 +162,7 @@
               <div class="card-body">
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                   <div class="mb-3 mb-sm-0">
-                    <h5 class="card-title fw-semibold">Orders</h5>
+                    <h5 style="font-size: 25px;text-align: center;" class="card-title fw-semibold">Orders List</h5>
                     <div>
                       <style>
                         /* Table styling */
@@ -177,8 +177,10 @@
 
                         /* Table header */
                         #adminDashboardTable th {
-                          background-color: #f2f2f2;
-                          color: #000000;
+                          border: 2px solid #000000;
+
+                          background-color: #5D87FF;
+                          color: #ffffff;
                           padding: 10px;
                           text-align: left;
                           font-size: 16px;
@@ -197,7 +199,9 @@
                         }
 
                         #adminDashboardTable tr:hover {
-                          background-color: #f4e1e1;
+                          font-size: 110%;
+                          color: rgb(0, 0, 0);
+                          background-color: #ffffff;
                         }
 
                         /* Center alignment for specific columns */
@@ -207,7 +211,7 @@
 
                         /* Styling the 'Created At' column */
                         #adminDashboardTable td.createdAt {
-                          color: #777;
+                          color: #c4c4c4;
                           font-style: italic;
                         }
 
@@ -254,7 +258,7 @@
                                       <%= orders[i].createdAt.toISOString().slice(0, 10) %>
                                     </td><!-- .toISOString().slice(0, 10) -->
                                     <td class="items">
-                                      <a href="/admin/orderValues?orderId=<%= orders[i]._id %>">Check Details</a>
+                                      <a href="/admin/orderValues?orderId=<%= orders[i]._id %>">View Details</a>
                                       <!-- <% orders[i].items.forEach(item => { %>
                                  
                                   <div><strong>Product:</strong> <%= item.productName %>, <strong>Quantity:</strong> <%= item.quantity %>, <strong>Amount:</strong> <%= item.price %></div>
@@ -270,10 +274,8 @@
 
 
                       <div class="pagination">
-                        <% for (let i=1; i <=totalPages; i++) { %>
-                          <a href="/admin/orders?page=<%= i %>&limit=<%= limit %>"
-                            class="<%= page === i ? 'active' : '' %>">
-                            <%= i %>
+                        <% for (let i=1; i < totalPages; i++) { %>
+                          <a href="/admin/order?page=<%= i %>&limit=<%= limit %>" class="<%= page === i ? 'active' : '' %>"><button style="padding: 5px;margin-right: 5px;" ><%= i %></button>
                           </a>
                           <% } %>
                       </div>

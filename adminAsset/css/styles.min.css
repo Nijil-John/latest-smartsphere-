@@ -484,14 +484,17 @@ caption {
 
 th {
     font-weight: 600;
+    background-color: #5D87FF;
+    color: white;
     text-align: inherit;
     text-align: -webkit-match-parent
 }
 
 tbody,td,tfoot,th,thead,tr {
     padding-left: 5px;
+    border-color: black;
     padding-right: 60px;
-    border-color: inherit;
+   /*  border-color: inherit; */
     border-style: solid;
     border: width 1px;
 }

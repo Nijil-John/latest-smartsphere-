@@ -183,18 +183,43 @@
                                         <div class="mb-4">
                                             <h5 class="card-title fw-semibold">Add Category</h5>
                                         </div>
-
-                                        <form action="/admin/addcategory" method="POST">
-                                            <!--  <label for="categoryName">Category Id:</label><br>
-                                            <input type="text" id="categoryName" name="categoryId" required><br><br> -->
+                                    
+                                        <form id="categoryForm" action="/admin/addcategory" method="POST">
+                                            <p id="error" style="color: red;" aria-live="polite"></p>
                                             <label for="categoryName">Category Name:</label><br>
-                                            <input type="text" id="categoryName" name="categoryName" required><br><br>
-                                            <label for="categoryName">Category Description:</label><br>
-                                            <input type="text" id="categoryName" name="categoryDescription"
-                                                required><br><br>
+                                            <input class="validate-field" type="text" name="categoryName" required><br><br>
+                                            <label for="categoryDescription">Category Description:</label><br>
+                                            <input class="validate-field" type="text" name="categoryDescription" required><br><br>
                                             <button type="submit">Add Category</button>
                                         </form>
+                                    
+                                        <script>
+                                            document.getElementById('categoryForm').addEventListener('submit', function (event) {
+                                                event.preventDefault(); // Prevent form submission
+                                    
+                                                const fields = document.querySelectorAll('.validate-field'); // Select all input fields with the class
+                                                const errorElement = document.getElementById('error');
+                                                let isValid = true;
+                                    
+                                                fields.forEach(field => {
+                                                    const value = field.value.trim();
+                                    
+                                                    if (value.length < 5 || /^\s*$/.test(value)) {
+                                                        errorElement.textContent = 'All fields must be at least 5 characters long and not just spaces.';
+                                                        isValid = false;
+                                                    }
+                                                });
+                                    
+                                                if (isValid) {
+                                                    errorElement.textContent = '';
+                                                    this.submit(); // Proceed with form submission
+                                                }
+                                            });
+                                        </script>
                                     </div>
+                                    
+                                    
+                                    
 
 
 

@@ -342,7 +342,7 @@ const orderLoad = async (req, res) => {
   try {
     // Pagination setup
     const page = parseInt(req.query.page) || 1; // Current page number, default to 1
-    const limit = parseInt(req.query.limit) || 30; // Number of orders per page, default to 10
+    const limit = parseInt(req.query.limit) || 10; // Number of orders per page, default to 10
     const skip = (page - 1) * limit;
 
     // Fetch orders from the database with pagination
