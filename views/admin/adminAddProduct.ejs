@@ -185,7 +185,7 @@
                                         class="form-container">
                                         <!-- <label for="productId">Product Id:</label>
                                         <input type="text" id="productId" name="productId" required><br><br> -->
-
+                                        <p id="error" style="color: red;" aria-live="polite"></p>
                                         <div class="form-group">
                                             <label for="productName">Product Name:</label>
                                             <input type="text" id="productName" name="productName" required>
@@ -235,7 +235,7 @@
 
                                     <script>
                                         let selectedFiles = [];
-
+                                        const errorElement = document.getElementById('error');
                                         // Function to handle file input change event
                                         function handleFileInputChange(event) {
                                             const files = event.target.files;
@@ -308,6 +308,62 @@
                                         // Attach event listener to file input
                                         document.getElementById('productImages').addEventListener('change', handleFileInputChange);
                                     </script>
+
+<script>
+    // Function to validate the form before submission
+    function validateForm(event) {
+        const productName = document.getElementById('productName').value.trim();
+        const brandName = document.getElementById('brandName').value.trim();
+        const productPrice = document.getElementById('productPrice').value.trim();
+        const productQuantity = document.getElementById('productQuantity').value.trim();
+        const productCategory = document.getElementById('productCategory').value.trim();
+        const productDescription = document.getElementById('productDescription').value.trim();
+
+        let isValid = true;
+        let errorMessage = "";
+
+        // Check if fields are empty or contain only spaces
+        if (!productName ||productName.length < 3) {
+            isValid = false;
+            errorMessage += "Product Name cannot be empty or spaces only or single letter.\n \nfch";
+        }
+        if (!brandName) {
+            isValid = false;
+            errorMessage += "Brand Name cannot be empty or spaces only.\n \n";
+        }
+        if (!productPrice || isNaN(productPrice) || Number(productPrice) <= 0) {
+            isValid = false;
+            errorMessage += "Product Price must be a positive number.\n \n";
+        }
+        if (!productQuantity || isNaN(productQuantity) || Number(productQuantity) < 1) {
+            isValid = false;
+            errorMessage += "Product Quantity must be a valid positive number.\n \n";
+        }
+        if (productCategory === "Please select") {
+            isValid = false;
+            errorMessage += "Please select a Product Category.\n \n";
+        }
+        if (!productDescription) {
+            isValid = false;
+            errorMessage += "Product Description cannot be empty or spaces only.\n \n";
+        }
+
+        // If not valid, prevent form submission and show error
+        if (!isValid) {
+            errorElement.textContent = errorMessage
+            //alert(errorMessage);
+            event.preventDefault();
+        }
+    }
+
+    // Attach event listener to the form
+    document.querySelector('.form-container').addEventListener('submit', validateForm);
+</script>
+
+
+
+
+
 
                                     <style>
                                         .form-container {

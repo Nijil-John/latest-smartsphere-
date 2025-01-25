@@ -218,15 +218,16 @@
                     <form id="couponForm" action="/admin/couponAdd" method="POST">
                       <!-- Coupon Code -->
                       <label for="code">Coupon Code:</label>
-                      <input type="text" id="code" name="code" required maxlength="255" style="text-transform:uppercase"
-                        placeholder="Give the code" />
+                      <input type="text" id="code" name="code" required maxlength="255" style="text-transform:uppercase" placeholder="Give the code" />
+                      <p class="error" id="codeError"></p>
                       <br><br>
-
+                    
                       <!-- Remark -->
                       <label for="details">Details:</label>
                       <input type="text" id="details" name="details" placeholder="Coupon Details" />
+                      <p class="error" id="detailsError"></p>
                       <br><br>
-
+                    
                       <!-- Discount Type -->
                       <label for="discountType">Discount Type:</label>
                       <select id="discountType" name="discountType" required>
@@ -235,94 +236,129 @@
                         <option value="fixed-amount">Fixed Amount</option>
                       </select>
                       <br><br>
-
+                    
                       <!-- Discount Value -->
                       <label for="discountValue">Discount Value:</label>
                       <input type="number" id="discountValue" name="discountValue" required min="0" />
-                      <span class="error" id="discountValueError"></span>
+                      <p class="error" id="discountValueError"></p>
                       <br><br>
-
+                    
                       <!-- Minimum Purchase Amount -->
                       <label for="minPurchaseAmount">Minimum Purchase Amount:</label>
                       <input type="number" id="minPurchaseAmount" name="minPurchaseAmount" min="0" />
                       <br><br>
-
+                    
                       <!-- Maximum Discount Amount -->
                       <label for="maxDiscountAmount">Maximum Discount Amount:</label>
                       <input type="number" id="maxDiscountAmount" name="maxDiscountAmount" />
-                      <span class="error" id="maxDiscountAmountError"></span>
+                      <p class="error" id="maxDiscountAmountError"></p>
                       <br><br>
-
+                    
                       <!-- Start Date -->
                       <label for="startDate">Start Date:</label>
                       <input type="date" id="startDate" name="startDate" required />
-                      <span class="error" id="startDateError"></span>
+                      <p class="error" id="startDateError"></p>
                       <br><br>
-
+                    
                       <!-- End Date -->
                       <label for="endDate">End Date:</label>
                       <input type="date" id="endDate" name="endDate" required />
-                      <span class="error" id="endDateError"></span>
+                      <p class="error" id="endDateError"></p>
                       <br><br>
-
+                    
                       <!-- Usage Limit -->
                       <label for="usageLimit">Usage Limit:</label>
                       <input type="number" id="usageLimit" name="usageLimit" min="0" />
+                      <p class="error" id="usageLimitError"></p>
                       <br><br>
-
+                    
                       <!-- Status -->
                       <label for="status">Status:</label>
-                      <select id="status" name="status">
-                        <option value="0">Select Status</option>
+                      <select id="status" name="status" required>
+                        <option value="">Select Status</option>
                         <option value="pending">Upcoming</option>
                         <option value="active">Active</option>
                         <option value="expired">Expired</option>
                       </select>
+                      <p class="error" id="statusError"></p>
                       <br><br>
-
+                    
                       <!-- Submit Button -->
                       <button type="submit">Create Coupon</button>
                     </form>
-
+                    
                     <script>
                       document.getElementById('couponForm').addEventListener('submit', function (event) {
+                        const code = document.getElementById('code').value.trim();
+                        const details = document.getElementById('details').value.trim();
+                        const status = document.getElementById('status').value;
+                        const usageLimit = parseInt(document.getElementById('usageLimit').value.trim()) || 0;
                         const startDate = document.getElementById('startDate').value;
                         const endDate = document.getElementById('endDate').value;
-                        const discountType = document.getElementById('discountType').value;
+                        const discountType = document.getElementById('discountType').value.trim();
                         const discountValue = parseFloat(document.getElementById('discountValue').value);
-                        const minPurchaseAmount = parseFloat(document.getElementById('minPurchaseAmount').value) || 0;
-                        const maxDiscountAmount = parseFloat(document.getElementById('maxDiscountAmount').value);
-
+                        const minPurchaseAmount = parseFloat(document.getElementById('minPurchaseAmount').value.trim()) || 0;
+                        const maxDiscountAmount = parseFloat(document.getElementById('maxDiscountAmount').value.trim());
+                    
                         let isValid = true;
-
+                    
                         // Clear previous errors
                         document.querySelectorAll('.error').forEach(error => error.textContent = '');
-
-                        // Validate start date
+                    
+                        // Validate Coupon Code
+                        if (!code) {
+                          document.getElementById('codeError').textContent = "Coupon code is required.";
+                          isValid = false;
+                        }
+                    
+                        // Validate Details
+                        if (!details) {
+                          document.getElementById('detailsError').textContent = "Details are required.";
+                          isValid = false;
+                        }
+                    
+                        // Validate Status
+                        if (!status) {
+                          document.getElementById('statusError').textContent = "Status is required.";
+                          isValid = false;
+                        }
+                    
+                        // Validate Usage Limit
+                        if (usageLimit < 0) {
+                          document.getElementById('usageLimitError').textContent = "Usage limit cannot be negative.";
+                          isValid = false;
+                        }
+                    
+                        // Validate Start Date
                         const today = new Date().toISOString().split('T')[0];
                         if (startDate < today) {
                           document.getElementById('startDateError').textContent = "Start date cannot be in the past.";
                           isValid = false;
                         }
-
-                        // Validate end date
+                    
+                        // Validate End Date
                         if (endDate <= startDate) {
                           document.getElementById('endDateError').textContent = "End date must be after the start date.";
                           isValid = false;
                         }
-                        let discountshouldbe = ((minPurchaseAmount * discountValue) / 100) - 1
-                        // Validate maximum discount amount for percentage type
-                        if (discountType === 'percentage' && (discountshouldbe - 1) >= maxDiscountAmount) {
-                          document.getElementById('maxDiscountAmountError').textContent = `Maximum Discount Amount must be greater than the ${discountshouldbe}.`;
-                          isValid = false;
+                    
+                        // Validate Maximum Discount Amount for Percentage Type
+                        if (discountType === 'percentage') {
+                          const discountShouldBe = ((minPurchaseAmount * discountValue) / 100) - 1;
+                          if (maxDiscountAmount <= discountShouldBe) {
+                            document.getElementById('maxDiscountAmountError').textContent = `Maximum Discount Amount must be greater than ${discountShouldBe}.`;
+                            isValid = false;
+                          }
                         }
-
+                    
                         // Prevent form submission if validation fails
                         if (!isValid) {
                           event.preventDefault();
                         }
                       });
                     </script>
+                    
+                    
 
 
                   </div>

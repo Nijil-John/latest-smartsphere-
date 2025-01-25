@@ -389,6 +389,83 @@
                                             });
                                         </script>
 
+<script>
+    document.getElementById('offer-form').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent form submission for validation
+
+    // Clear previous error messages
+    document.querySelectorAll('.error-message').forEach(function (el) {
+        el.textContent = '';
+    });
+
+    let isValid = true;
+
+    // Helper function to check if a field is empty or contains only spaces
+    const isEmpty = (value) => !value || value.trim() === '';
+
+    // Validate fields
+    const title = document.getElementById('title').value;
+    if (isEmpty(title)) {
+        document.getElementById('error-title').textContent = 'Offer title is required.';
+        isValid = false;
+    }
+
+    const offerType = document.querySelector('input[name="offerType"]:checked');
+    if (!offerType) {
+        document.getElementById('error-title').textContent = 'Please select an offer type.';
+        isValid = false;
+    }
+
+    if (offerType && offerType.value === 'product') {
+        const typeIdProduct = document.getElementById('TypeId').value;
+        if (isEmpty(typeIdProduct)) {
+            document.getElementById('error-TypeId-product').textContent = 'Please select a product.';
+            isValid = false;
+        }
+    } else if (offerType && offerType.value === 'category') {
+        const typeIdCategory = document.getElementById('TypeId').value;
+        if (isEmpty(typeIdCategory)) {
+            document.getElementById('error-TypeId-category').textContent = 'Please select a category.';
+            isValid = false;
+        }
+    }
+
+    const discountPercentage = document.getElementById('discountPercentage').value;
+    if (isEmpty(discountPercentage) || discountPercentage <= 0 || discountPercentage > 100) {
+        document.getElementById('error-discountPercentage').textContent = 'Discount percentage must be between 1 and 100.';
+        isValid = false;
+    }
+
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+
+    // Validate Start Date
+    if (isEmpty(startDate)) {
+        document.getElementById('error-startDate').textContent = 'Start date is required.';
+        isValid = false;
+    } else if (endDate && startDate > endDate) {
+        document.getElementById('error-startDate').textContent = 'Start date must be before or on the same day as the end date.';
+        isValid = false;
+    }
+
+    // Validate End Date
+    if (isEmpty(endDate)) {
+        document.getElementById('error-endDate').textContent = 'End date is required.';
+        isValid = false;
+    } else if (endDate <= today) {
+        document.getElementById('error-endDate').textContent = 'End date must be in the future.';
+        isValid = false;
+    }
+
+    // If all validations pass, submit the form
+    if (isValid) {
+        event.target.submit();
+    }
+});
+
+</script>
 
                                         <style>
                                             .error-message {

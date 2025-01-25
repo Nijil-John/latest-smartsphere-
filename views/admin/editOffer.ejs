@@ -331,7 +331,7 @@
                                                 let isValid = true;
 
                                                 // Validate fields
-                                                const title = document.getElementById('title').value;
+                                                const title = document.getElementById('title').value.trim();
                                                 if (!title) {
                                                     document.getElementById('error-title').textContent = 'Offer title is required.';
                                                     isValid = false;
@@ -352,7 +352,7 @@
                                                     }
                                                 }
 
-                                                const discountPercentage = document.getElementById('discountPercentage').value;
+                                                const discountPercentage = document.getElementById('discountPercentage').value.trim();
                                                 if (!discountPercentage) {
                                                     document.getElementById('error-discountPercentage').textContent = 'Discount percentage is required.';
                                                     isValid = false;
