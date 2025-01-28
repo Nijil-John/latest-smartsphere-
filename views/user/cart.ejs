@@ -218,81 +218,86 @@
 												</div>
 												<div class="item-actions">
 													Qty:
-													<button data-product-id="<%= product._id %>" data-cart-id="<%= cartItems._id %>" class="increment-btn">
+													<button data-product-id="<%= product._id %>" data-qty-value="<%= product.__v %>"
+														data-cart-id="<%= cartItems._id %>" class="increment-btn">
 														<strong>+</strong>
 													</button>
-													<input style="width: 40px; text-align: center;" type="number" name="quantity" value="<%= product.__v %>" min="1" id="quantity-input" readonly data-cart-id="<%= cartItems._id %>">
-													<button data-product-id="<%= product._id %>" data-cart-id="<%= cartItems._id %>" class="decrement-btn">
+													<input style="width: 40px; text-align: center;" type="number"
+														name="quantity" value="<%= product.__v %>" min="1"
+														id="quantity-input" readonly
+														data-cart-id="<%= cartItems._id %>">
+													<button data-product-id="<%= product._id %>"
+														data-cart-id="<%= cartItems._id %>" class="decrement-btn" data-qty-value="<%= product.__v %>">
 														<strong>-</strong>
 													</button>
-													<p style="font: 22px bold; color: #ca0000;">Total Price: ₹<%= (product.price * product.__v).toFixed(2) %></p>
+													<p style="font: 22px bold; color: #ca0000;">Total Price: ₹<%=
+															(product.price * product.__v).toFixed(2) %>
+													</p>
 												</div>
-												
-												
-												
 
-
-												
+												<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 												<script>
-													document.addEventListener('DOMContentLoaded', () => {
-    const incrementButtons = document.querySelectorAll('.increment-btn');
-    const decrementButtons = document.querySelectorAll('.decrement-btn');
-
-    // Function to update quantity and total price
-    const updateQuantity = async (url, method = 'GET') => {
-        try {
-            const response = await fetch(url, { method });
-            if (response.ok) {
-                const updatedCart = await response.json(); // Contains updated quantity and total price
-                console.log(updatedCart); // Debugging purpose
-                const { updatedQuantity, totalPrice } = updatedCart;
-
-                // Update DOM elements
-                const qtyInput = document.querySelector(`#quantity-input[data-cart-id="${url.split('=')[1]}"]`);
-                const priceElement = qtyInput.parentElement.querySelector('p');
-
-                // Update the quantity and price
-                qtyInput.value = updatedQuantity;
-                priceElement.textContent = `Total Price: ₹${totalPrice}`;
-
-            } else {
-                console.error('Failed to update quantity');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    // Add click listeners for increment and decrement buttons
-    incrementButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const productId = btn.dataset.productId;
-            const cartId = btn.dataset.cartId;
-            const qty = btn.nextElementSibling.value;
-            const url = `/incrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}`;
-            updateQuantity(url);
-			location.reload()
-        });
-    });
-
-    decrementButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const productId = btn.dataset.productId;
-            const cartId = btn.dataset.cartId;
-            const qty = btn.previousElementSibling.value;
-            const url = `/decrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}`;
-            updateQuantity(url);
-			location.reload()
-        });
-    });
-});
-
-												</script>
-												
+													$(document).ready(() => {
+													  const updateQuantity = (url, successCallback) => {
+														$.ajax({
+														  url,
+														  method: "POST",
+														  success: successCallback,
+														  error: (xhr, status, error) => {
+															console.error("Error:", error);
+														  },
+														});
+													  };
+												  
+													  const updateFinalPayment = ({ totalAmount, discountAmount, finalPayment }) => {
+														const finalPaymentElement = document.querySelector(
+														  'p[style*="font: 22px bold;color: #ca0000;"]'
+														);
+														finalPaymentElement.innerHTML = `
+														  Full and final payment: ₹${finalPayment} <br>														  
+														`;
+													  };
+												  
+													  $(".increment-btn").on("click", function () {
+														const productId = $(this).data("product-id");
+														const cartId = $(this).data("cart-id");
+														const qty = $(this).data("qty-value"); // Current quantity
+														const url = `/incrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}&couponApplied=true&discountType=fixed-amount&maxDiscountAmount=0&discountValue=0`;
+												  
+														updateQuantity(url, (response) => {
+														  const { updatedQuantity, totalPrice, totalAmount, discountAmount, finalPayment } =
+															response;
+												  
+														  $(this).siblings("input").val(updatedQuantity);
+														  $(this).parent().find("p").text(`Total Price: ₹${totalPrice}`);
+														  updateFinalPayment({ totalAmount, discountAmount, finalPayment });
+														});
+													  });
+												  
+													  $(".decrement-btn").on("click", function () {
+														const productId = $(this).data("product-id");
+														const cartId = $(this).data("cart-id");
+														const qty = $(this).data("qty-value"); // Current quantity
+														const url = `/decrementQuantity?productId=${productId}&cartId=${cartId}&qty=${qty}&couponApplied=true&discountType=fixed-amount&maxDiscountAmount=0&discountValue=0`;
+												  
+														updateQuantity(url, (response) => {
+														  const { updatedQuantity, totalPrice, totalAmount, discountAmount, finalPayment } =
+															response;
+												  
+														  $(this).siblings("input").val(updatedQuantity);
+														  $(this).parent().find("p").text(`Total Price: ₹${totalPrice}`);
+														  updateFinalPayment({ totalAmount, discountAmount, finalPayment });
+														});
+													  });
+													});
+												  </script>
 												  
 
 
-											
+
+
+
+
 
 
 								</div>
@@ -354,27 +359,42 @@
 														<% discountAmount=(totalAmount * coupon.discountValue) / 100; %>
 															<% } %>
 
-																<% if (discountAmount> totalAmount) { discountAmount = totalAmount; } %>
+																<% if (discountAmount> totalAmount) { discountAmount =
+																	totalAmount; } %>
 																	<% let finalAmount=totalAmount - discountAmount; %>
-																		<%if(coupon.discountType==='percentage' && discountAmount> coupon.maxDiscountAmount) {%>
-																		<p>Discount Amount: <%=  coupon.maxDiscountAmount %></p>
-																		<% discountAmount=coupon.maxDiscountAmount %>
-																		<%} else{%>
-																			<p>Discount Amount: <%= discountAmount %></p>
-																			<%}%>
-																		<p style="font: 22px bold;color: #ca0000;">full and final payment:
-																			<% if(totalAmount > coupon.minPurchaseAmount){%>
-																				<%= totalAmount-discountAmount %>
-
-																					<%} else{%>
-																						<%= totalAmount %>
-																							<%}%>
-																		</p>
-																		<% } else {%>
-																			<br>
-																			<p style="font: 22px bold;color: #ca0000;">
-																				full and final payment:<%= totalAmount	%>
+																		<%if(coupon.discountType==='percentage' &&
+																			discountAmount> coupon.maxDiscountAmount)
+																			{%>
+																			<p>Discount Amount: <%=
+																					coupon.maxDiscountAmount %>
+																			</p>
+																			<% discountAmount=coupon.maxDiscountAmount
+																				%>
+																				<%} else{%>
+																					<p>Discount Amount: <%=
+																							discountAmount %>
+																					</p>
 																					<%}%>
+																						<p
+																							style="font: 22px bold;color: #ca0000;">
+																							Full and final payment:
+																							<% if(totalAmount>
+																								coupon.minPurchaseAmount){%>
+																								<%= totalAmount-discountAmount
+																									%>
+
+																									<%} else{%>
+																										<%= totalAmount
+																											%>
+																											<%}%>
+																						</p>
+																						<% } else {%>
+																							<br>
+																							<p
+																								style="font: 22px bold;color: #ca0000;">
+																								Full and final payment:
+																								<%= totalAmount %>
+																									<%}%>
 
 
 

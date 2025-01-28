@@ -86,8 +86,9 @@ userRoute.get('/cartdata',loginAuthenticator,cartController.loadCart)
 userRoute.get('/cart/ItemDelete',loginAuthenticator,cartController.deleteFromCart)
 userRoute.post('/couponcode',loginAuthenticator,cartController.updateCoupon)
 userRoute.get('/deleteCoupon',loginAuthenticator,cartController.deleteCoupon)
-userRoute.get('/incrementQuantity',loginAuthenticator,cartController.incrementQuantity)
-userRoute.get('/decrementQuantity',loginAuthenticator,cartController.decrementQuantity)
+userRoute.post('/incrementQuantity', loginAuthenticator, cartController.incrementQuantity);
+userRoute.post('/decrementQuantity', loginAuthenticator, cartController.decrementQuantity);
+
 
 const couponController=require('../controller/couponController')
 //coupon
