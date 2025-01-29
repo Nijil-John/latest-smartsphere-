@@ -354,69 +354,85 @@ const decrementQuantity = async (req, res) => {
 
 const incrementQuantity = async (req, res) => {
   try {
-    if (req.query.qty > 0) {
-      const productData = await product.findById(req.query.productId);
-      if (productData.quantity > req.query.qty && req.query.qty < 3) {
-        await Cart.updateOne(
-          { _id: req.query.cartId, "items.productId": req.query.productId },
-          { $inc: { "items.$.quantity": 1 } }
-        );
-      }
+    const { cartId, productId, couponApplied, discountType, maxDiscountAmount, discountValue } = req.query;
+    console.log( req.query);
+
+    // Find the cart and the specific item
+    const cart = await Cart.findById(cartId).populate("items.productId");
+    const item = cart.items.find((item) => item.productId._id.toString() === productId);
+
+    if (!item) {
+      return res.status(404).json({ error: "Item not found in cart" });
     }
 
-    // Fetch updated cart and calculate amounts
-    const updatedCart = await Cart.findById(req.query.cartId).populate("items.productId");
-    const updatedItem = updatedCart.items.find((item) => item.productId._id.toString() === req.query.productId);
-    const updatedQuantity = updatedItem.quantity;
-    const totalPrice = (updatedItem.productId.price * updatedQuantity).toFixed(2);
-
-    // Calculate total amount and discount
-    const totalAmount = updatedCart.items.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
-    const discountAmount = req.query.couponApplied? req.query.discountType === "fixed-amount"? req.query.maxDiscountAmount: Math.min((totalAmount * req.query.discountValue) / 100, req.query.maxDiscountAmount): 0;
-    const finalPayment = totalAmount - discountAmount;
-    console.log(discountAmount);
-    res.json({ updatedQuantity, totalPrice, totalAmount, discountAmount, finalPayment });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: "An error occurred while updating quantity" });
-  }
-};
-
-
-const decrementQuantity = async (req, res) => {
-  try {
-    console.log(req.query);
-    if (req.query.qty > 1) { // Ensure the quantity does not go below 1
-      const productData = await product.findById(req.query.productId);
-      if (productData && req.query.qty <= productData.quantity) {
-        await Cart.updateOne(
-          { _id: req.query.cartId, "items.productId": req.query.productId },
-          { $inc: { "items.$.quantity": -1 } }
-        );
-      }
+    // Check if the quantity can be incremented
+    if (item.quantity < item.productId.quantity && item.quantity < 3) {
+      item.quantity += 1; // Increment the quantity
+      await cart.save(); // Save the updated cart
     }
 
-    // Fetch updated cart and calculate amounts
-    const updatedCart = await Cart.findById(req.query.cartId).populate("items.productId");
-    const updatedItem = updatedCart.items.find((item) => item.productId._id.toString() === req.query.productId);
-    const updatedQuantity = updatedItem.quantity;
-    const totalPrice = (updatedItem.productId.price * updatedQuantity).toFixed(2);
-
-    // Calculate total amount and discount
-    const totalAmount = updatedCart.items.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
-    const discountAmount = req.query.couponApplied
-      ? req.query.discountType === "fixed-amount"
-        ? req.query.maxDiscountAmount
-        : Math.min((totalAmount * req.query.discountValue) / 100, req.query.maxDiscountAmount)
+    // Recalculate totals and discounts
+    const totalAmount = cart.items.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
+    const discountAmount = couponApplied
+      ? discountType === "fixed-amount"
+        ? maxDiscountAmount
+        : Math.min((totalAmount * discountValue) / 100, maxDiscountAmount)
       : 0;
     const finalPayment = totalAmount - discountAmount;
 
-    res.json({ updatedQuantity, totalPrice, totalAmount, discountAmount, finalPayment });
+    res.json({
+      updatedQuantity: item.quantity,
+      totalPrice: (item.quantity * item.productId.price).toFixed(2),
+      totalAmount,
+      discountAmount,
+      finalPayment,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "An error occurred while updating quantity" });
   }
 };
+
+const decrementQuantity = async (req, res) => {
+  try {
+    const { cartId, productId, couponApplied, discountType, maxDiscountAmount, discountValue } = req.query;
+    console.log( req.query);
+    // Find the cart and the specific item
+    const cart = await Cart.findById(cartId).populate("items.productId");
+    const item = cart.items.find((item) => item.productId._id.toString() === productId);
+
+    if (!item) {
+      return res.status(404).json({ error: "Item not found in cart" });
+    }
+
+    // Check if the quantity can be decremented
+    if (item.quantity > 1) {
+      item.quantity -= 1; // Decrement the quantity
+      await cart.save(); // Save the updated cart
+    }
+
+    // Recalculate totals and discounts
+    const totalAmount = cart.items.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
+    const discountAmount = couponApplied
+      ? discountType === "fixed-amount"
+        ? maxDiscountAmount
+        : Math.min((totalAmount * discountValue) / 100, maxDiscountAmount)
+      : 0;
+    const finalPayment = totalAmount - discountAmount;
+
+    res.json({
+      updatedQuantity: item.quantity,
+      totalPrice: (item.quantity * item.productId.price).toFixed(2),
+      totalAmount,
+      discountAmount,
+      finalPayment,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "An error occurred while updating quantity" });
+  }
+};
+
 
 
 
