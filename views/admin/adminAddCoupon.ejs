@@ -335,6 +335,10 @@
                           document.getElementById('startDateError').textContent = "Start date cannot be in the past.";
                           isValid = false;
                         }
+                        if (discountValue >=1) {
+                          document.getElementById('discountValueError').textContent = "discount should be a positve number and not a zero";
+                          isValid = false;
+                        }
                     
                         // Validate End Date
                         if (endDate <= startDate) {
