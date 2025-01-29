@@ -316,6 +316,10 @@
                           document.getElementById('endDateError').textContent = "End date must be after the start date.";
                           isValid = false;
                         }
+                        if (discountValue >=1) {
+                          document.getElementById('discountValueError').textContent = "discount should be a positve number and not a zero";
+                          isValid = false;
+                        }
                     
                         // Validate Maximum Discount Amount for Percentage Type
                         if (discountType === 'percentage') {
